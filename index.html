@@ -80,14 +80,20 @@
       align-items: center;
       font-size: 1.5rem;
       font-weight: 600;
-      color: var(--text-primary);
       padding-left: 0px; /* Make space for icon */
       cursor: pointer; /* Shows it's clickable */
       transition: transform 0.2s ease; /* Optional: Add hover effect */
+      overflow: hidden;
+
+      background: linear-gradient(to right, rgb(255, 196, 221), rgb(141, 238, 255));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
     }
 
     .header-title:hover {
-      text-shadow: 0 0 15px rgba(61, 132, 247, 0.8); /* Optional: Glow effect */
+      text-shadow: 0 0 15px rgba(135, 247, 255, 0.4); /* Optional: Glow effect */
     }
     
     .header-title::before {
@@ -137,7 +143,12 @@
       font-size: 2.5rem;
       font-weight: 600;
       margin-bottom: 1.5rem;
-      color: var(--text-primary);
+      
+      background: linear-gradient(to right, rgb(255, 196, 221), rgb(141, 238, 255));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
     }
     
     /* Description text */
@@ -146,7 +157,7 @@
       max-width: 700px;
       margin: 0 auto 2rem;
       font-size: 1.1rem;
-      color: var(--text-secondary);
+      color: rgb(255, 196, 221);
       line-height: 1.7;
       padding: 1rem;
       background-color: rgba(30, 30, 30, 0.7);
@@ -461,12 +472,14 @@
     .btn-primary {
       background-color: var(--accent-primary);
       color: white;
+      font-style: italic !important;
     }
 
     .btn-secondary {
       background-color: var(--bg-secondary);
       color: var(--text-primary);
       border: 1px solid var(--border-light);
+      font-style: italic !important;
     }
 
     .btn-danger {
@@ -1231,6 +1244,15 @@
         vertical-align: middle;
       }
     }
+
+    .decorative-symbols {
+      white-space: nowrap;
+    }
+    @media (max-width: 480px) {
+      .decorative-symbols {
+        display: none;
+      }
+    }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
@@ -1256,9 +1278,11 @@
   </div>
   <header>
     <div class="header-container">
-      <a href="./" class="header-title" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 8px;">
+      <a href="./" class="header-title" style="text-decoration: none; color: rgb(255, 196, 221); display: flex; align-items: center; gap: 8px;">
         <img src="assets/images/favicon-32x32.png" alt="Fluffytail Logo" width="24" height="24" style="filter: drop-shadow(0 0 2px rgba(0,0,0,0.5))">
-        <span><span style="font-style: normal;">‧͙⁺˚*･༓☾</span> Fluffytail <span style="font-style: normal;">☽༓･*˚⁺‧͙</span></span>
+        <span style="white-space: nowrap;">
+          <span class="decorative-symbols" style="font-style: normal;">‧͙⁺˚*･༓☾</span> Fluffytail <span class="decorative-symbols" style="font-style: normal;">☽༓･*˚⁺‧͙</span>
+        </span>
       </a>
       <div class="user-panel" id="userPanel">
         <!-- Content will be dynamically generated -->
@@ -1288,7 +1312,7 @@
   <div id="floating-user-info"></div>
 
   <div class="container">
-    <h1>Fluffytail Party Boss Blitz Roster</h1>
+    <h1><span class="decorative-symbols">✧༺♥༻∞</span> Fluffytail Party Boss Blitz Roster <span class="decorative-symbols">∞༺♥༻✧</span></h1>
     
     <div class="description">
       This page organizes static groups for the weekly <strong>Party Boss Blitz</strong> content.<br>
