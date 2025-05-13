@@ -220,7 +220,8 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Math Serif Italic v2';
+      font-style: italic;
       box-shadow: var(--shadow-sm);
     }
     
@@ -1277,7 +1278,7 @@
     </div>
     <a href="/Fluffytail-Roster/pages/profile/index.html" class="dropdown-item" id="profile-link">Profile</a>
     <div class="dropdown-divider"></div>
-    <button class="dropdown-item" id="logout-btn">Logout</button>
+    <button class="dropdown-item" id="logout-btn"><span style="font-style: italic;">Logout</span></button>
   </div>
   
   <div id="floating-user-info"></div>
@@ -1412,13 +1413,13 @@
         <div class="form-group">
           <label for="adminUsername">Username</label>
           <div class="autocomplete-wrapper">
-            <input type="text" id="adminUsername" placeholder="Enter username to modify" autocomplete="off">
+            <input type="text" id="adminUsername" style="font-style: italic;" placeholder="Enter username to modify" autocomplete="off">
             <div id="userSuggestions" class="autocomplete-results"></div>
           </div>
         </div>
         <div class="form-group">
           <label for="adminRole">New Role</label>
-          <select id="adminRole" style="width: 100%; padding: 0.8rem; border-radius: var(--radius-sm); background-color: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-primary); font-family: inherit;">
+          <select id="adminRole" style="font-style: italic; width: 100%; padding: 0.8rem; border-radius: var(--radius-sm); background-color: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-primary); font-family: inherit;">
             <option value="member">Member</option>
             <option value="mercenary">Mercenary</option>
             <option value="officer">Officer</option>
@@ -1428,13 +1429,13 @@
             <option value="admin-toggle">Toggle Admin Status</option>
           </select>
         </div>
-        <button class="btn btn-primary" id="updateRoleBtn" style="margin-top: 0.5rem;">Update Role</button>
+        <button class="btn btn-primary" id="updateRoleBtn" style="font-style: italic; margin-top: 0.5rem;">Update Role</button>
       </div>
       
       <div style="margin-bottom: 1.5rem;">
         <h4 style="margin-bottom: 0.5rem; color: var(--text-secondary);">Roster Management</h4>
-        <button class="btn btn-danger" id="resetRosterBtn">Reset Roster</button>
-        <button class="btn btn-secondary" id="exportRosterBtn" style="margin-left: 0.5rem;">Export Roster</button>
+        <button class="btn btn-danger" style="font-style: italic;" id="resetRosterBtn">Reset Roster</button>
+        <button class="btn btn-secondary" id="exportRosterBtn" style="font-style: italic; margin-left: 0.5rem;">Export Roster</button>
       </div>
       
       <div class="form-actions">
