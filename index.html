@@ -491,6 +491,8 @@
 
     /* Join/leave buttons */
     .join-btn {
+      font-family: 'Math Serif Italic v2';
+      font-style: italic;
       background-color: var(--accent-primary);
       color: white;
       border: none;
@@ -506,6 +508,8 @@
     }
 
     .leave-btn {
+      font-family: 'Math Serif Italic v2';
+      font-style: italic;
       background-color: #e44f4f;
       color: white;
       border: none;
@@ -2765,7 +2769,7 @@
     
             // Admin/Officer edit button
             const editButton = currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'officer'].includes(currentUser.role)) ?
-                `<button class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.3rem 0.7rem;" onclick="editGroup('${currentSection}', ${groupIndex})">Edit</button>` : '';
+                `<button class="btn btn-secondary" style="font-family: 'Math Serif Italic v2'; font-style: italic; font-size: 0.8rem; padding: 0.3rem 0.7rem;" onclick="editGroup('${currentSection}', ${groupIndex})">Edit</button>` : '';
     
             // Convert UTC time to local time
             const localTime = convertUTCToLocal(group.timeUTC);
