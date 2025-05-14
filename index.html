@@ -85,7 +85,7 @@
       transition: transform 0.2s ease; /* Optional: Add hover effect */
       overflow: hidden;
 
-      background: linear-gradient(to right, rgb(255, 196, 221), rgb(141, 238, 255));
+      background: linear-gradient(to right, rgb(141, 238, 255), rgb(255, 196, 221));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -155,7 +155,7 @@
       font-weight: 600;
       margin-bottom: 1.5rem;
       
-      background: linear-gradient(to right, rgb(255, 196, 221), rgb(141, 238, 255));
+      background: linear-gradient(to right, rgb(141, 238, 255), rgb(255, 196, 221));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -483,16 +483,18 @@
     }
 
     .btn-primary {
-      background-color: var(--accent-primary);
-      color: white;
+      background-color: rgba(21, 51, 71, 0.6);
+      color: rgb(255, 196, 221);
       font-style: italic !important;
+      font-weight: 600;
     }
 
     .btn-secondary {
-      background-color: var(--bg-secondary);
-      color: var(--text-primary);
+      background-color: rgba(30, 30, 30, 0.6);
+      color: rgb(255, 196, 221);
       border: 1px solid var(--border-light);
       font-style: italic !important;
+      font-weight: 600;
     }
 
     .btn-danger {
@@ -519,7 +521,7 @@
     .join-btn {
       font-family: 'Math Serif Italic v2';
       font-style: italic;
-      background-color: var(--accent-primary);
+      background-color: rgb(111, 105, 192);
       color: white;
       border: none;
       border-radius: var(--radius-sm);
@@ -536,7 +538,7 @@
     .leave-btn {
       font-family: 'Math Serif Italic v2';
       font-style: italic;
-      background-color: #e44f4f;
+      background-color: #c56c89;
       color: white;
       border: none;
       border-radius: var(--radius-sm);
@@ -725,7 +727,7 @@
     #userSidebar {
       position: fixed;
       left: 20px;
-      top: 104px;
+      top: 103.4px;
       width: 280px;
       background-color: rgba(30, 30, 30, 0.7);
       backdrop-filter: blur(10px);
@@ -922,7 +924,8 @@
       position: fixed;
       top: 120px;
       right: 20px;
-      background-color: var(--bg-secondary);
+      background-color: rgba(30, 30, 30, 0.7);
+      backdrop-filter: blur(10px);
       border-radius: var(--radius-md);
       box-shadow: var(--shadow-lg);
       border: 1px solid var(--border-light);
@@ -939,7 +942,7 @@
     .dropdown-item {
       display: block;
       padding: 0.5rem 1rem;
-      color: var(--text-primary);
+      color: rgb(255, 196, 221);
       text-decoration: none;
       transition: background-color 0.2s;
       border: none;
@@ -1263,6 +1266,10 @@
         gap: 0.5rem;
       }
       
+      .username-display {
+        color: rgb(0, 0, 0);
+      }
+
       .user-actions {
         width: 100%;
         justify-content: flex-end;
@@ -1340,7 +1347,7 @@
   <div id="floating-user-info"></div>
 
   <div class="container">
-    <h1><span class="decorative-symbols">✧༺♥༻∞</span> Fluffytail Party Boss Blitz Roster <span class="decorative-symbols">∞༺♥༻✧</span></h1>
+    <h1><span class="decorative-symbols" style="font-style: normal;">✧༺♥༻∞</span> Fluffytail Party Boss Blitz Roster <span class="decorative-symbols" style="font-style: normal;">∞༺♥༻✧</span></h1>
     
     <div class="description">
       This page organizes static groups for the weekly <strong>Party Boss Blitz</strong> content.<br>
@@ -1904,7 +1911,7 @@
               ${currentUser.photoURL ? `<img src="${currentUser.photoURL}" alt="avatar" style="width:32px;height:32px;border-radius:50%;">` : initial}
             </div>
             <div>
-              <span>${currentUser.username}</span>
+              <span class="username-display">${currentUser.username}</span>
               ${roleBadge}
             </div>
           </div>
