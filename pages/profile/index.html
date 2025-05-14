@@ -21,7 +21,7 @@
       --text-tertiary: #b0b0b0;
       --guild-color: #4ade80;
       --merc-color: #c084fc;
-      --border-light: rgba(255, 255, 255, 0.1);
+      --border-light: rgba(255, 159, 204, 0.3);
       --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
       --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.3);
       --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.4);
@@ -359,38 +359,48 @@
       border-color: var(--accent-primary);
     }
 
+    /* Role badges */
     .role-badge {
       display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: capitalize;
-      margin-top: 0.5rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-lg);
+      font-size: 0.75rem;
+      margin-left: 0rem;
+      font-weight: 500;
     }
 
     .role-badge.admin {
-      background-color: #f43f5e;
+      background-color: rgba(255, 88, 144, 0.904);
+      color: white;
+    }
+    
+    .role-badge.guild-master {
+      background-color: #ff9f45;
       color: white;
     }
 
-    .role-badge.guild-master {
-      background-color: var(--filled-glow);
-      color: #121212;
+    .role-badge.advisor {
+      background-color: #7581a7;
+      color: white;
     }
 
     .role-badge.staff {
-      background-color: #8b5cf6;
+      background-color: #f37e7e;
       color: white;
     }
 
     .role-badge.officer {
-      background-color: #10b981;
+      background-color: #56a0a5;
       color: white;
     }
 
     .role-badge.member {
-      background-color: #3b82f6;
+      background-color: #4fa74c;
+      color: white;
+    }
+
+    .role-badge.mercenary {
+      background-color: var(--merc-color);
       color: white;
     }
 		
