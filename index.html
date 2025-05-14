@@ -2316,19 +2316,26 @@
     // =====================
 
     function getRoleBadgeImage(userData) {
-      const badges = {
-        "admin": "assets/images/badges/admin.png",
+      const badges = [];
+      
+      // Check for admin first
+      if (userData.isAdmin) {
+        badges.push("assets/images/badges/admin.png");
+      }
+      
+      // Then add role-specific badge
+      const roleBadges = {
         "guild-master": "assets/images/badges/guild-master.png",
         "advisor": "assets/images/badges/advisor.png",
         "staff": "assets/images/badges/staff.png",
         "officer": "assets/images/badges/officer.png"
       };
       
-      // Check isAdmin first, then fall back to role
-      if (userData.isAdmin) {
-        return badges["admin"];
+      if (roleBadges[userData.role]) {
+        badges.push(roleBadges[userData.role]);
       }
-      return badges[userData.role] || null;
+      
+      return badges;
     }
     
     // Function to determine if a player is a guild member or mercenary
@@ -2883,16 +2890,13 @@
                                     ${window.allUserRoles && window.allUserPhotos 
                                         ? (() => {
                                             const userRole = window.allUserRoles[player.name];
-                                            const userData = { role: userRole, isAdmin: false };
-                                            
                                             const isAdmin = window.allUserAdmins && window.allUserAdmins[player.name];
+                                            const badges = getRoleBadgeImage({ role: userRole, isAdmin });
                                             
-                                            if (isAdmin || getRoleBadgeImage({ role: userRole, isAdmin })) {
-                                                return `<img src="${getRoleBadgeImage({ role: userRole, isAdmin })}" 
-                                                            alt="${isAdmin ? 'admin' : userRole}" 
-                                                            style="width: 20px; height: 20px; vertical-align: middle; margin-left: 5px;">`;
-                                            }
-                                            return '';
+                                            return badges.map(badge => 
+                                              `<img src="${badge}" alt="${isAdmin ? 'admin' : userRole}" 
+                                                    style="width: 20px; height: 20px; vertical-align: middle; margin-left: 5px;">`
+                                            ).join('');
                                         })()
                                         : ''}
                                 </span>
@@ -3240,13 +3244,20 @@
           }
           
           const avatarUrl = user.photoURL || '';
-          const roleBadge = getRoleBadgeImage(user.role);
+          const badges = getRoleBadgeImage({ 
+            role: user.role, 
+            isAdmin: user.isAdmin || false 
+          });
           
           userItem.innerHTML = `
             ${avatarUrl ? `<img src="${avatarUrl}" class="user-list-avatar" alt="${user.username}">` : 
               `<div class="user-list-avatar" style="background-color: ${stringToColor(user.username)}; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">${user.username.charAt(0).toUpperCase()}</div>`}
             <span class="user-list-name">${user.username}</span>
-            ${roleBadge ? `<img src="${roleBadge}" class="user-list-role" alt="${user.role}" style="width: 24px; height: 24px;">` : ''}
+            ${badges.length > 0 ? 
+              badges.map(badge => 
+                `<img src="${badge}" class="user-list-role" alt="badge" style="width: 24px; height: 24px; margin-left: 5px;">`
+              ).join('') 
+              : ''}
           `;
           
           // Store user data on the element
@@ -3296,8 +3307,7 @@
             }
             
             const avatarUrl = user.photoURL || '';
-            // Update to use the new getRoleBadgeImage that checks isAdmin
-            const roleBadge = getRoleBadgeImage({ 
+            const badges = getRoleBadgeImage({ 
               role: user.role, 
               isAdmin: user.isAdmin || false 
             });
@@ -3306,7 +3316,11 @@
               ${avatarUrl ? `<img src="${avatarUrl}" class="user-list-avatar" alt="${user.username}">` : 
                 `<div class="user-list-avatar" style="background-color: ${stringToColor(user.username)}; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">${user.username.charAt(0).toUpperCase()}</div>`}
               <span class="user-list-name">${user.username}</span>
-              ${roleBadge ? `<img src="${roleBadge}" class="user-list-role" alt="${user.isAdmin ? 'admin' : user.role}" style="width: 24px; height: 24px;">` : ''}
+              ${badges.length > 0 ? 
+                badges.map(badge => 
+                  `<img src="${badge}" class="user-list-role" alt="badge" style="width: 24px; height: 24px; margin-left: 5px;">`
+                ).join('') 
+                : ''}
             `;
             
             // Store user data on the element
