@@ -2290,54 +2290,6 @@
       return !snapshot.exists();
     }
     
-    async function migrateUsernames() {
-      // 1. Get all existing users
-      const usersRef = database.ref('users');
-      const snapshot = await usersRef.once('value');
-      
-      // 2. Prepare updates
-      const updates = {};
-      let count = 0;
-      
-      snapshot.forEach(user => {
-        const username = user.child('username').val();
-        const uid = user.key;
-        
-        if (username) {
-          // Add lowercase username to users
-          updates[`users/${uid}/lowercaseUsername`] = username.toLowerCase();
-          
-          // Update usernames mapping (overwrites any existing)
-          updates[`usernames/${username.toLowerCase()}`] = uid;
-          
-          count++;
-        }
-      });
-      
-      // 3. Execute all updates
-      console.log(`Migrating ${count} usernames...`);
-      await database.ref().update(updates);
-      console.log('Migration complete! Updated', count, 'users');
-    }
-
-    // Temporary button to run migration (add this to your admin panel)
-    function addMigrationButton() {
-      if (currentUser && currentUser.isAdmin) {
-        const btn = document.createElement('button');
-        btn.textContent = 'Run Username Migration';
-        btn.className = 'btn btn-danger';
-        btn.onclick = () => {
-          if (confirm('This will update ALL usernames to be case-insensitive. Continue?')) {
-            migrateUsernames().catch(console.error);
-          }
-        };
-        document.getElementById('adminModal .modal-content').appendChild(btn);
-      }
-    }
-
-    // Call this once to add the button
-    addMigrationButton();
-
     // Generate a simple UID
     function generateUid() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
