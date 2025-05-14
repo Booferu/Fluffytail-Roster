@@ -919,6 +919,35 @@
       z-index: 40;
     }
 
+    /* Style for the floating user info container */
+    #floating-user-info #user-info-clickable {
+      top: 103.4px !important;
+      background: rgba(30, 30, 30, 0.7); /* Match your container's bg */
+      backdrop-filter: blur(10px); /* Match glass effect */
+      border: 1px solid var(--border-light); /* Match container border */
+      border-radius: var(--radius-md); /* Match your radius */
+      padding: 8px 12px; /* Comfortable spacing */
+      box-shadow: var(--shadow-sm); /* Subtle shadow like other elements */
+      transition: all 0.3s ease;
+    }
+
+    /* Hover effect */
+    #floating-user-info #user-info-clickable:hover {
+      background: rgba(40, 40, 40, 0.8);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Adjust avatar positioning */
+    #floating-user-info .user-avatar {
+      margin-right: 8px; /* Better spacing */
+    }
+
+    /* Username text styling */
+    #floating-user-info .username-display {
+      color: var(--accent-secondary) !important; /* Pink accent */
+      font-weight: 500;
+    }
+
     /* User Dropdown Styles */
     .user-dropdown {
       position: fixed;
@@ -1906,7 +1935,7 @@
 
         // Floating panel (avatar + username - now clickable)
         floatingPanel.innerHTML = `
-          <div class="user-info" style="position: fixed; top: 88px; right: 20px; display: flex; align-items: center; gap: 8px; cursor: pointer; z-index: 51;" id="user-info-clickable">
+          <div class="user-info" style="color: rgb(255, 196, 221); position: fixed; top: 88px; right: 20px; display: flex; align-items: center; gap: 8px; cursor: pointer; z-index: 51;" id="user-info-clickable">
             <div class="user-avatar" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background-color: ${color}; color: white; font-weight: bold;">
               ${currentUser.photoURL ? `<img src="${currentUser.photoURL}" alt="avatar" style="width:32px;height:32px;border-radius:50%;">` : initial}
             </div>
