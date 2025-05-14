@@ -2180,6 +2180,22 @@
       }
     }
     
+    // Helper function to create user records
+    async function createUser(uid, username, email, role) {
+      const lowercaseUsername = username.toLowerCase();
+      
+      await database.ref(`users/${uid}`).set({
+        username: username,
+        lowercaseUsername: lowercaseUsername,
+        email: email,
+        role: role || 'member',
+        isAdmin: false,
+        createdAt: firebase.database.ServerValue.TIMESTAMP
+      });
+
+      await database.ref(`usernames/${lowercaseUsername}`).set(uid);
+    }
+    
     // Handle registration form submission
     async function handleRegister() {
       const username = document.getElementById('registerUsername').value.trim();
@@ -2189,6 +2205,7 @@
       const officerCode = document.getElementById('officerCode').value.trim();
       const alertElement = document.getElementById('registerAlert');
 
+      // Input validation
       if (!username || !password || !confirmPassword) {
         showAlert(alertElement, 'Please fill in all fields', 'error');
         return;
@@ -2204,38 +2221,44 @@
         return;
       }
 
+      // Officer code validation (if applicable)
+      if (role === 'officer' && officerCode !== 'YOUR_OFFICER_CODE') {
+        showAlert(alertElement, 'Invalid officer code', 'error');
+        return;
+      }
+
       try {
-        // 1. First check username availability
-        const usernameSnapshot = await database.ref(`usernames/${username}`).once('value');
-        if (usernameSnapshot.exists()) {
+        // Case-insensitive username check
+        if (!await isUsernameAvailable(username)) {
           showAlert(alertElement, 'Username already taken', 'error');
           return;
         }
-    
-        // 2. Create auth user
-        const fakeEmail = `${username}@fluffytail.com`;
+
+        // Create auth user with lowercase email
+        const fakeEmail = `${username.toLowerCase()}@fluffytail.com`;
         const userCredential = await auth.createUserWithEmailAndPassword(fakeEmail, password);
-        const uid = userCredential.user.uid;
-    
-        // 3. Prepare all database updates
-        const updates = {};
-        updates[`users/${uid}`] = {
-          username: username,
-          role: role,
-          isAdmin: false, // New users are not admins by default
-          createdAt: firebase.database.ServerValue.TIMESTAMP
-        };
-        updates[`usernames/${username}`] = uid;
-    
-        // 4. Execute all updates atomically
-        await database.ref().update(updates);
-    
-        // 5. Clear form and close modal
+        
+        // Create database records using helper
+        await createUser(userCredential.user.uid, username, fakeEmail, role);
+
+        // Success handling
         closeModal('registerModal');
         document.getElementById('registerUsername').value = '';
         document.getElementById('registerPassword').value = '';
         document.getElementById('registerConfirmPassword').value = '';
-    
+        document.getElementById('officerCode').value = '';
+
+        showAlert(alertElement, 'Registration successful!', 'success');
+        
+        // Optional: Auto-login
+        currentUser = {
+          uid: userCredential.user.uid,
+          username: username,
+          role: role,
+          isAdmin: false
+        };
+        updateUserPanel();
+
       } catch (error) {
         console.error('Registration error:', error);
         
@@ -2247,15 +2270,74 @@
             console.error('Error cleaning up user:', deleteError);
           }
         }
-    
+
+        // User-friendly error messages
+        let errorMessage = error.message;
         if (error.code === 'auth/email-already-in-use') {
-          showAlert(alertElement, 'Username already registered', 'error');
-        } else {
-          showAlert(alertElement, error.message, 'error');
+          errorMessage = 'Username already registered';
+        } else if (error.code === 'auth/weak-password') {
+          errorMessage = 'Password should be at least 6 characters';
         }
+
+        showAlert(alertElement, errorMessage, 'error');
       }
     }
+
+    // Helper function to check username availability
+    async function isUsernameAvailable(username) {
+      const lowercaseUsername = username.toLowerCase();
+      const snapshot = await database.ref('usernames').child(lowercaseUsername).once('value');
+      return !snapshot.exists();
+    }
     
+    async function migrateUsernames() {
+      // 1. Get all existing users
+      const usersRef = database.ref('users');
+      const snapshot = await usersRef.once('value');
+      
+      // 2. Prepare updates
+      const updates = {};
+      let count = 0;
+      
+      snapshot.forEach(user => {
+        const username = user.child('username').val();
+        const uid = user.key;
+        
+        if (username) {
+          // Add lowercase username to users
+          updates[`users/${uid}/lowercaseUsername`] = username.toLowerCase();
+          
+          // Update usernames mapping (overwrites any existing)
+          updates[`usernames/${username.toLowerCase()}`] = uid;
+          
+          count++;
+        }
+      });
+      
+      // 3. Execute all updates
+      console.log(`Migrating ${count} usernames...`);
+      await database.ref().update(updates);
+      console.log('Migration complete! Updated', count, 'users');
+    }
+
+    // Temporary button to run migration (add this to your admin panel)
+    function addMigrationButton() {
+      if (currentUser && currentUser.isAdmin) {
+        const btn = document.createElement('button');
+        btn.textContent = 'Run Username Migration';
+        btn.className = 'btn btn-danger';
+        btn.onclick = () => {
+          if (confirm('This will update ALL usernames to be case-insensitive. Continue?')) {
+            migrateUsernames().catch(console.error);
+          }
+        };
+        document.getElementById('adminModal .modal-content').appendChild(btn);
+      }
+    }
+
+    // Call this once to add the button
+    addMigrationButton();
+
     // Generate a simple UID
     function generateUid() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
