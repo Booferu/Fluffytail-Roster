@@ -13,8 +13,8 @@
       --bg-primary: #121212;
       --bg-secondary: #1e1e1e;
       --bg-tertiary: #252525;
-      --accent-primary: #3d84f7;
-      --accent-secondary: #ed4b9e;
+      --accent-primary: #a1ddff;
+      --accent-secondary: #fd8fc8;
       --accent-tertiary: #f2c94c;
       --text-primary: #ffffff;
       --text-secondary: #e0e0e0;
@@ -77,10 +77,16 @@
       align-items: center;
       font-size: 1.5rem;
       font-weight: 600;
-      color: var(--text-primary);
       padding-left: 0px; /* Make space for icon */
       cursor: pointer; /* Shows it's clickable */
       transition: transform 0.2s ease; /* Optional: Add hover effect */
+      overflow: hidden;
+
+      background: linear-gradient(to right, rgb(141, 238, 255), rgb(255, 196, 221));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
     }
 
     .header-title:hover {
@@ -122,7 +128,7 @@
     }
 
     .admin-panel-btn {
-      background-color: var(--accent-secondary);
+      background-color: rgba(255, 88, 144, 0.904);
       color: white;
       border: none;
       padding: 0.5rem 1rem;
@@ -136,7 +142,7 @@
     }
 
     .admin-panel-btn:hover {
-      background-color: #d43d8a;
+      background-color: rgba(255, 88, 144, 0.904);
       box-shadow: 0 0 10px rgba(237, 75, 158, 0.5);
     }
 
@@ -201,6 +207,7 @@
     }
     
     .profile-container {
+      color: rgb(255, 196, 221) !important;
       padding: 2rem;
     }
 
@@ -273,6 +280,7 @@
     }
 
     .profile-section h2 {
+      color: rgb(255, 196, 221) !important;
       color: var(--accent-primary);
       margin-top: 0;
       margin-bottom: 1.5rem;
@@ -284,6 +292,7 @@
     }
 
     .form-group label {
+      color: rgb(255, 196, 221) !important;
       display: block;
       margin-bottom: 0.5rem;
       color: var(--text-secondary);
@@ -296,7 +305,7 @@
       border-radius: var(--radius-sm);
       border: 1px solid var(--border-light);
       background-color: var(--bg-secondary);
-      color: var(--text-primary);
+      color: rgb(255, 196, 221) !important;
       font-family: 'Poppins', sans-serif;
       transition: border-color 0.3s ease;
     }
@@ -320,6 +329,7 @@
     }
 
     .btn {
+      color: rgb(255, 255, 255) !important;
       padding: 0.75rem 1.5rem;
       border-radius: var(--radius-sm);
       border: none;
@@ -330,7 +340,7 @@
     }
 
     .btn-primary {
-      background-color: var(--accent-primary);
+      background-color: rgba(255, 88, 144, 0.904);
       color: white;
     }
 
@@ -341,7 +351,7 @@
 
     .btn-secondary {
       background-color: var(--bg-tertiary);
-      color: var(--text-primary);
+      color: rgb(255, 196, 221) !important;
       border: 1px solid var(--border-light);
     }
 
@@ -399,7 +409,7 @@
 		}
 
 		.screenshot-placeholder {
-			color: var(--text-tertiary);
+			color: rgb(255, 196, 221) !important;
 			padding: 2rem;
 			text-align: center;
 		}
@@ -526,6 +536,32 @@
         font-size: 24px;
         font-weight: bold;
     }
+
+    /* Placeholder text color */
+    ::placeholder {
+      color: rgb(255, 196, 221) !important;
+      opacity: 0.7 !important;
+    }
+
+    :-ms-input-placeholder {
+      color: rgb(255, 196, 221) !important;
+    }
+
+    ::-ms-input-placeholder {
+      color: rgb(255, 196, 221) !important;
+    }
+
+    /* Class not specified text */
+    .no-class-specified {
+      color: rgb(255, 196, 221) !important;
+      opacity: 0.7;
+    }
+
+    /* AP/DP/GS labels in hover card */
+    .hover-stat span {
+      color: rgb(255, 196, 221) !important;
+      opacity: 0.8;
+    }
   </style>
 </head>
 <body>
@@ -595,7 +631,7 @@
                     </div>
                     
                     <div id="hoverCardPreviewContainer" style="flex: 0.65; min-width: 300px;">
-                        <h3 style="margin-bottom: 1rem; color: var(--text-secondary);">Preview</h3>
+                        <h3 style="margin-bottom: 1rem; color: rgb(255, 196, 221) !important;">Preview</h3>
                         <div id="hoverCardPreview" class="profile-hover-card" style="position: relative; opacity: 1; display: block; width: 100%; height: 225px; pointer-events: auto;">
                             <div class="hover-card-header">
                                 <div class="hover-avatar-container">
@@ -625,7 +661,7 @@
                                 </div>
                             </div>
                         </div>
-                        <p style="margin-top: 0.5rem; color: var(--text-tertiary); font-size: 0.9rem;">
+                        <p style="margin-top: 0.5rem; color: rgb(255, 196, 221) !important; font-size: 0.9rem;">
                             This gives you an idea of how your profile will look when others hover your name.
                         </p>
                     </div>
@@ -732,7 +768,7 @@
         
         userPanel.innerHTML = `
             ${currentUser?.isAdmin || ['guild-master', 'advisor', 'staff', 'officer'].includes(currentUser?.role) ? 
-              `<button class="admin-panel-btn" onclick="localStorage.setItem('openAdminModal', 'true'); window.location.href='../../index.html'">
+              `<button style="font-family: 'Math Serif Italic v2'; font-style: italic;" class="admin-panel-btn" onclick="localStorage.setItem('openAdminModal', 'true'); window.location.href='../../index.html'">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
                 </svg>
@@ -861,7 +897,7 @@
         document.getElementById('previewHoverAP').textContent = profile.ap || '0';
         document.getElementById('previewHoverDP').textContent = profile.dp || '0';
         document.getElementById('previewHoverGS').textContent = ((parseInt(profile.ap) || 0) + (parseInt(profile.dp) || 0)).toString();
-        document.getElementById('previewHoverClass').textContent = profile.characterClass || 'Class not specified';
+        document.getElementById('previewHoverClass').innerHTML = profile.characterClass || '<span class="no-class-specified">Class not specified</span>';
         
         // Update background image if screenshot exists
         const hoverCard = document.querySelector('#hoverCardPreview.profile-hover-card');
