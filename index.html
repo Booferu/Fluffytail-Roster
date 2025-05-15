@@ -30,7 +30,7 @@
       --radius-sm: 6px;
       --radius-md: 10px;
       --radius-lg: 8px;
-      --filled-glow: #e6973b;
+      --filled-glow: #ffe2ad;
     }
     
     /* Reset and base styles */
@@ -333,7 +333,7 @@
     
     /* Filled group styling */
     .group.filled {
-      box-shadow: 0 0 10px 0 rgba(230, 151, 59, 0.35);
+      box-shadow: 0 0 10px 0 rgb(255, 226, 173);
       border: 1px solid rgba(230, 151, 59, 0.3);
     }
     
@@ -2307,7 +2307,7 @@
     
     // Update user role (admin function)
     async function updateUserRole() {
-      const username = document.getElementById('adminUsername').value.trim();
+      const username = document.getElementById('adminUsername').value.trim().toLowerCase();
       const newRole = document.getElementById('adminRole').value;
       const alertElement = document.getElementById('adminAlert');
     
