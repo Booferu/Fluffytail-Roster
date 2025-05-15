@@ -1778,11 +1778,12 @@
       for (const uid in users) {
         const user = users[uid];
         if (user.username) {
+          const normalized = user.username.toLowerCase(); // Normalize key
           if (user.photoURL) {
-            window.allUserPhotos[user.username] = user.photoURL;
+            window.allUserPhotos[normalized] = user.photoURL;
           }
-          window.allUserRoles[user.username] = user.role;
-          window.allUserAdmins[user.username] = user.isAdmin || false;
+          window.allUserRoles[normalized] = user.role;
+          window.allUserAdmins[normalized] = user.isAdmin || false;
         }
       }
     }
@@ -2699,7 +2700,20 @@
     
             try {
                 const usernamesSnapshot = await database.ref('usernames').once('value');
-                const uid = usernamesSnapshot.val()[username];
+                const normalizedUsername = username.toLowerCase();
+                const usernamesMap = usernamesSnapshot.val();
+                let uid = usernamesMap[normalizedUsername];
+
+                // Try fallback: look through all usernames to match case-insensitively
+                if (!uid) {
+                  for (const key in usernamesMap) {
+                    if (key.toLowerCase() === normalizedUsername) {
+                      uid = usernamesMap[key];
+                      break;
+                    }
+                  }
+                }
+
                 if (!uid) return;
     
                 const [userSnapshot, profileSnapshot] = await Promise.all([
@@ -2767,46 +2781,52 @@
     function updateHoverCard(data) {
       const hoverCard = document.getElementById('profileHoverCard');
       document.getElementById('hoverUsername').textContent = data.username;
-      
+
+      // Normalize the username for lookups
+      const normalized = data.username?.toLowerCase?.() || '';
+      const lookupPhoto = window.allUserPhotos?.[normalized] || data.photoURL || null;
+      const lookupRole = window.allUserRoles?.[normalized] || data.role || 'member';
+      const isAdmin = window.allUserAdmins?.[normalized] || data.isAdmin || false;
+
       // Set character class if available
       const hoverClass = document.getElementById('hoverClass');
       hoverClass.textContent = data.characterClass || 'Class not specified';
-      
+
       const roleBadge = document.getElementById('hoverRoleBadge');
-      
+
       // Clear previous badges
       roleBadge.innerHTML = '';
-      
+
       // Add admin badge if user is admin
-      if (data.isAdmin) {
+      if (isAdmin) {
         const adminBadge = document.createElement('span');
         adminBadge.className = 'role-badge admin';
         adminBadge.textContent = 'Admin';
         adminBadge.style.marginRight = '0.5rem';
         roleBadge.appendChild(adminBadge);
       }
-      
+
       // Add role badge
-      const role = data.role || 'member';
       const roleBadgeText = document.createElement('span');
-      roleBadgeText.className = `role-badge ${role}`;
-      roleBadgeText.textContent = role.split('-').map(word => 
-        word.charAt(0).toUpperCase() + word.slice(1)
-      ).join(' ');
+      roleBadgeText.className = `role-badge ${lookupRole}`;
+      roleBadgeText.textContent = lookupRole
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
       roleBadge.appendChild(roleBadgeText);
-    
-      // Rest of the function remains the same...
+
+      // Avatar handling
       const hoverAvatar = document.getElementById('hoverAvatar');
-      if (data.photoURL) {
-        hoverAvatar.src = data.photoURL;
+      if (lookupPhoto) {
+        hoverAvatar.src = lookupPhoto;
         hoverAvatar.style.display = 'block';
         hoverAvatar.nextElementSibling.style.display = 'none';
       } else {
-        const firstLetter = data.username.charAt(0).toUpperCase();
-        const colors = ['#FFB900', '#FF8C00', '#F7630C', '#CA5010', '#DA3B01', 
-                       '#EF6950', '#D13438', '#FF4343', '#E74856', '#E81123'];
-        const color = colors[firstLetter.charCodeAt(0) % colors.length];
-        
+        const firstLetter = data.username?.charAt(0)?.toUpperCase?.() || '?';
+        const colors = ['#FFB900', '#FF8C00', '#F7630C', '#CA5010', '#DA3B01',
+                        '#EF6950', '#D13438', '#FF4343', '#E74856', '#E81123'];
+        const color = colors[firstLetter.charCodeAt(0) % colors.length] || '#FFB900';
+
         hoverAvatar.style.display = 'none';
         const defaultAvatar = hoverAvatar.nextElementSibling || document.createElement('div');
         defaultAvatar.className = 'default-avatar';
@@ -2820,16 +2840,19 @@
         defaultAvatar.style.fontSize = '24px';
         defaultAvatar.style.fontWeight = 'bold';
         defaultAvatar.textContent = firstLetter;
-        
+
         if (!hoverAvatar.nextElementSibling) {
           hoverAvatar.parentNode.appendChild(defaultAvatar);
         }
       }
-    
+
+      // Stats
       document.getElementById('hoverAP').textContent = data.ap || '0';
       document.getElementById('hoverDP').textContent = data.dp || '0';
-      document.getElementById('hoverGS').textContent = ((parseInt(data.ap) || 0) + (parseInt(data.dp) || 0)).toString();
-    
+      document.getElementById('hoverGS').textContent =
+        ((parseInt(data.ap) || 0) + (parseInt(data.dp) || 0)).toString();
+
+      // Screenshot background
       if (data.characterScreenshot) {
         hoverCard.style.backgroundImage = `url(${data.characterScreenshot})`;
       } else {
