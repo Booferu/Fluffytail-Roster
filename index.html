@@ -304,6 +304,12 @@
       gap: var(--grid-gap);
     }
     
+    /* Remove borders globally */
+    /* remove this and !important from .player-list li { to restore original behavior */
+    * {
+      border: none !important;
+    }
+
     /* Group styling */
     .group {
       background: rgba(30, 30, 30, 0.7);
@@ -364,7 +370,7 @@
     
     .player-list li {
       padding: 0.7rem 0.5rem;
-      border-bottom: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light) !important;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -377,6 +383,7 @@
     }
     
     .player-list li:last-child {
+      
       border-bottom: none;
     }
     
@@ -678,8 +685,8 @@
     }
 
     .role-badge.secretary {
-      background-color: #ff9f45;
-      color: rgb(81, 118, 175);
+      background-color: rgb(89, 150, 231);
+      color: rgb(255, 255, 255);
     }
 
     .role-badge.officer {
@@ -739,7 +746,7 @@
     #userSidebar {
       position: fixed;
       left: 20px;
-      top: 103.4px;
+      top: 102.4px;
       width: 280px;
       background-color: rgba(30, 30, 30, 0.7);
       backdrop-filter: blur(10px);
@@ -955,7 +962,7 @@
 
     /* Style for the floating user info container */
     #floating-user-info #user-info-clickable {
-      top: 103.4px !important;
+      top: 102.4px !important;
       background: rgba(30, 30, 30, 0.7); /* Match your container's bg */
       backdrop-filter: blur(10px); /* Match glass effect */
       border: 1px solid var(--border-light); /* Match container border */
@@ -2015,7 +2022,7 @@
         } else if (currentUser.role === 'staff') {
           roleBadge += '<span class="role-badge staff">Staff</span>';
         } else if (currentUser.role === 'secretary') {
-          roleBadge += '<span class="role-badge officer">Secretary</span>';
+          roleBadge += '<span class="role-badge secretary">Secretary</span>';
         } else if (currentUser.role === 'officer') {
           roleBadge += '<span class="role-badge officer">Officer</span>';
         } else if (currentUser.role === 'member') {
