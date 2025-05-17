@@ -677,6 +677,11 @@
       color: white;
     }
 
+    .role-badge.secretary {
+      background-color: #ff9f45;
+      color: rgb(81, 118, 175);
+    }
+
     .role-badge.officer {
       background-color: #56a0a5;
       color: white;
@@ -1601,6 +1606,7 @@
             <option value="member">Member</option>
             <option value="mercenary">Mercenary</option>
             <option value="officer">Officer</option>
+            <option value="secretary">Secretary</option>
             <option value="staff">Staff</option>
             <option value="advisor">Advisor</option>
             <option value="guild-master">Guild Master</option>
@@ -2008,6 +2014,8 @@
           roleBadge += '<span class="role-badge advisor">Advisor</span>';
         } else if (currentUser.role === 'staff') {
           roleBadge += '<span class="role-badge staff">Staff</span>';
+        } else if (currentUser.role === 'secretary') {
+          roleBadge += '<span class="role-badge officer">Secretary</span>';
         } else if (currentUser.role === 'officer') {
           roleBadge += '<span class="role-badge officer">Officer</span>';
         } else if (currentUser.role === 'member') {
@@ -2037,7 +2045,7 @@
         panel.innerHTML = `
           <div class="user-actions">
             <input type="file" id="profilePicInput" accept="image/*" style="display:none" onchange="uploadToImgur(this.files[0])" />
-            ${currentUser?.isAdmin || ['guild-master', 'advisor', 'staff', 'officer'].includes(currentUser?.role) ? 
+            ${currentUser?.isAdmin || ['guild-master', 'advisor', 'staff', 'secretary', 'officer'].includes(currentUser?.role) ? 
               `<button class="admin-panel-btn" onclick="openModal('adminModal')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
@@ -2345,10 +2353,11 @@
     
           // Define assignable roles for each rank
           const assignableRoles = {
-            'admin': ['guild-master', 'advisor', 'staff', 'officer', 'member', 'mercenary'],
-            'guild-master': ['guild-master', 'advisor', 'staff', 'officer', 'member', 'mercenary'],
-            'advisor': ['advisor', 'staff', 'officer', 'member', 'mercenary'],
-            'staff': ['staff', 'officer', 'member', 'mercenary'],
+            'admin': ['guild-master', 'advisor', 'staff', 'secretary', 'officer', 'member', 'mercenary'],
+            'guild-master': ['guild-master', 'advisor', 'staff', 'secretary', 'officer', 'member', 'mercenary'],
+            'advisor': ['advisor', 'staff', 'secretary', 'officer', 'member', 'mercenary'],
+            'staff': ['staff', 'secretary', 'officer', 'member', 'mercenary'],
+            'secretary': ['secretary', 'officer', 'member', 'mercenary'],
             'officer': ['officer', 'member', 'mercenary'],
             'member': [],
             'mercenary': []
@@ -2390,7 +2399,10 @@
         "guild-master": "assets/images/badges/guild-master.png",
         "advisor": "assets/images/badges/advisor.png",
         "staff": "assets/images/badges/staff.png",
-        "officer": "assets/images/badges/officer.png"
+        "secretary": "assets/images/badges/secretary.png",
+        "officer": "assets/images/badges/officer.png",
+        "member": "assets/images/badges/member.png",
+        "mercenary": "assets/images/badges/mercenary.png"
       };
       
       if (roleBadges[userData.role]) {
@@ -2466,7 +2478,7 @@
       if (!currentUser) return false;
       
       // Admins and officers can always edit
-      if (currentUser?.isAdmin || ['guild-master', 'advisor', 'staff', 'officer'].includes(currentUser?.role)) return true;
+      if (currentUser?.isAdmin || ['guild-master', 'advisor', 'staff', 'secretary', 'officer'].includes(currentUser?.role)) return true;
       
       const processedPlayers = processPlayers(groupData.players || []);
       
@@ -2966,7 +2978,7 @@
                             data-original-name="${symbol}${player.name}"
                             data-username="${player.name}"
                             style="display: flex; align-items: center; justify-content: space-between;"
-                            ${currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'officer'].includes(currentUser?.role)) ? 'draggable="true"' : ''}>
+                            ${currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'secretary', 'officer'].includes(currentUser?.role)) ? 'draggable="true"' : ''}>
                             <div style="display: flex; align-items: center; gap: 0.5rem;">
                                 ${photoURL ? `<img src="${photoURL}" alt="avatar" style="width:24px;height:24px;border-radius:50%;">` : ''}
                                 <span class="player-name">
@@ -3003,7 +3015,7 @@
             }
     
             // Admin/Officer edit button
-            const editButton = currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'officer'].includes(currentUser.role)) ?
+            const editButton = currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'secretary', 'officer'].includes(currentUser.role)) ?
                 `<button class="btn btn-secondary" style="font-family: 'Math Serif Italic v2'; font-style: italic; font-size: 0.8rem; padding: 0.3rem 0.7rem;" onclick="editGroup('${currentSection}', ${groupIndex})">Edit</button>` : '';
     
             // Convert UTC time to local time
@@ -3023,7 +3035,7 @@
         });
     
         // Enable drag and drop for authorized users
-        if (currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'officer'].includes(currentUser.role))) {
+        if (currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'secretary', 'officer'].includes(currentUser.role))) {
             enableDragAndDrop();
         }
     
@@ -3033,7 +3045,7 @@
 
     // Function to edit a group (for admins/officers)
     function editGroup(section, groupIndex) {
-      if (!currentUser || !(currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'officer'].includes(currentUser.role))) {
+      if (!currentUser || !(currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'secretary', 'officer'].includes(currentUser.role))) {
         return;
       }
   
@@ -3075,7 +3087,7 @@
 
     // Function to save group changes
     async function saveGroupChanges(section, groupIndex) {
-      if (!currentUser || !(currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'officer'].includes(currentUser.role))) {
+      if (!currentUser || !(currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'secretary', 'officer'].includes(currentUser.role))) {
         return;
       }
   
@@ -3321,7 +3333,7 @@
           userItem.className = 'user-list-item';
           
           // Make item draggable only for admins/officers
-          if (currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'officer'].includes(currentUser.role))) {
+          if (currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'secretary', 'officer'].includes(currentUser.role))) {
             userItem.draggable = true;
             userItem.style.cursor = 'grab';
             userItem.addEventListener('dragstart', handleUserDragStart);
@@ -3384,7 +3396,7 @@
             userItem.className = 'user-list-item';
             
             // Make item draggable only for admins/officers
-            if (currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'officer'].includes(currentUser.role))) {
+            if (currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'secretary', 'officer'].includes(currentUser.role))) {
               userItem.draggable = true;
               userItem.style.cursor = 'grab';
               userItem.addEventListener('dragstart', handleUserDragStart);
@@ -3464,7 +3476,7 @@
       const playerSlots = document.querySelectorAll('.player-list li');
       
       playerSlots.forEach(slot => {
-        if (currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'officer'].includes(currentUser.role))) {
+        if (currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'secretary', 'officer'].includes(currentUser.role))) {
           // Remove any existing listeners
           slot.removeEventListener('dragover', handleSlotDragOver);
           slot.removeEventListener('dragenter', handleSlotDragEnter);
