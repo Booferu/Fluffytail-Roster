@@ -231,7 +231,7 @@
     
     /* Admin panel button */
     .admin-panel-btn {
-      background-color: rgba(255, 88, 144, 0.904);
+      background-color: #d8638a;
       color: white;
       border: none;
       padding: 0.5rem 1rem;
@@ -248,7 +248,7 @@
     }
     
     .admin-panel-btn:hover {
-      background-color: rgba(255, 88, 144, 0.904);
+      background-color: #d8638a;
       box-shadow: 0 0 10px rgba(237, 75, 158, 0.5);
       transform: translateY(-1px);
     }
@@ -260,30 +260,30 @@
     
     /* Mode buttons */
     #btn-normal { 
-      background-color: #089ec4;
+      background-color: #197f99;
     }
 
     #btn-normal.active {
-      background-color: #089ec4;
-      outline: 2px solid rgb(91, 208, 255);
+      background-color: #197f99;
+      outline: 2px solid rgb(77, 172, 209);
     }
 
     #btn-hard { 
-      background-color: #d4394e;
+      background-color: #962e3c;
     }
 
     #btn-hard.active {
-      background-color: #d4394e;
-      outline: 2px solid rgb(255, 109, 129);
+      background-color: #86323d;
+      outline: 2px solid rgb(201, 87, 103);
     }
     
     #btn-rerun { 
-      background-color: rgba(255, 88, 144, 0.904);
+      background-color: #d8638a;
       color: white;
     }
 
     #btn-rerun.active {
-      background-color: rgba(255, 88, 144, 0.904);
+      background-color: #d8638a;
       outline: 2px solid rgba(255, 148, 178, 1);
     }
     
@@ -662,30 +662,67 @@
       font-size: 0.75rem;
       margin-left: 0.5rem;
       font-weight: 500;
+      border-radius: 6px;
     }
 
     .role-badge.admin {
-      background-color: rgba(255, 88, 144, 0.904);
+      background-color: #d8638a;
       color: white;
     }
     
     .role-badge.guild-master {
-      background-color: #ff9f45;
-      color: white;
+      background: linear-gradient(135deg, 
+        #ffae00 0%, 
+        #f59921 25%, 
+        #ffbb00 50%, 
+        #ffe15a 75%, 
+        #ff9900 100%);
+      color: #1a1100;
+      font-weight: bold;
+      text-shadow: 0 1px 1px rgb(255, 255, 255);
+      border: 1px solid #D4AF37;
+      box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        inset 0 1px 3px rgb(255, 255, 255),
+        inset 0 -1px 3px rgba(0, 0, 0, 0.2);
+      position: absolute;
+      overflow: hidden;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* Optional: Add animated shine effect */
+    .role-badge.guild-master::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 50%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: rotate(30deg);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% { left: -60%; }
+      20% { left: 110%; }
+      100% { left: 110%; }
     }
 
     .role-badge.advisor {
-      background-color: #7581a7;
+      background-color: #565f7c;
       color: white;
     }
 
     .role-badge.staff {
-      background-color: #f37e7e;
+      background-color: #cc6b6b;
       color: white;
     }
 
     .role-badge.secretary {
-      background-color: rgb(89, 150, 231);
+      background-color: rgb(84, 135, 202);
       color: rgb(255, 255, 255);
     }
 
@@ -2557,6 +2594,9 @@
 
     // Function to leave a group
     async function leaveGroup(sectionName, groupIndex) {
+      // Hide hover card immediately when leaving
+      hideHoverProfile();
+
       if (!currentUser) return;
 
       const sectionKey = getActualSection(sectionName);
@@ -2675,6 +2715,11 @@
 
     // New mouse enter handler with better state management
     function handleMouseEnter(e) {
+        // Ignore if the hover originated from a button
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+            return;
+        }
+      
         // Get username from either dataset attribute
         const username = this.dataset.username || cleanPlayerName(this.dataset.originalName);
         if (!username) return;
@@ -2923,106 +2968,106 @@
     
     // Function to render groups
     function renderGroups(data) {
-        const container = document.getElementById('roster');
-        container.innerHTML = '';
+      const container = document.getElementById('roster');
+      container.innerHTML = '';
     
-        if (!data || data.length === 0) {
-            container.innerHTML = '<div class="loading">No data available for this section.</div>';
-            return;
+      if (!data || data.length === 0) {
+        container.innerHTML = '<div class="loading">No data available for this section.</div>';
+        return;
+      }
+    
+      data.forEach((group, groupIndex) => {
+        const div = document.createElement('div');
+        div.className = 'group';
+    
+        if (isGroupFilled(group.players)) {
+          div.classList.add('filled');
         }
     
-        data.forEach((group, groupIndex) => {
-            const div = document.createElement('div');
-            div.className = 'group';
+        let playerListHTML = '';
+        const processedPlayers = processPlayers(group.players || []);
     
-            if (isGroupFilled(group.players)) {
-                div.classList.add('filled');
-            }
-    
-            let playerListHTML = '';
-            const processedPlayers = processPlayers(group.players || []);
-    
-            // Make sure we always show 5 slots
-            for (let i = 0; i < 5; i++) {
-                const player = processedPlayers[i] || null;
+        // Make sure we always show 5 slots
+        for (let i = 0; i < 5; i++) {
+          const player = processedPlayers[i] || null;
             
-                if (player && player.name) {
-                    // Player slot with the option to leave if it's the current user
-                    const isCurrentUser = currentUser && player.name === currentUser.username;
-                    const leaveButton = isCurrentUser ? 
-                        `<button class="leave-btn" onclick="leaveGroup('${currentSection}', ${groupIndex})">Leave</button>` : '';
+          if (player && player.name) {
+            // Player slot with the option to leave if it's the current user
+            const isCurrentUser = currentUser && player.name === currentUser.username;
+            const leaveButton = isCurrentUser ? 
+              `<button class="leave-btn" onclick="leaveGroup('${currentSection}', ${groupIndex})">Leave</button>` : '';
                 
-                    const symbol = player.type === 'guild' ? '✔ ' : player.type === 'merc' ? '✦ ' : '';
-                    const photoURL = (window.allUserPhotos && window.allUserPhotos[player.name]) || null;
+            const symbol = player.type === 'guild' ? '✔ ' : player.type === 'merc' ? '✦ ' : '';
+            const photoURL = (window.allUserPhotos && window.allUserPhotos[player.name]) || null;
     
-                    playerListHTML += `
-                        <li class="player-${player.type}" 
-                            data-original-name="${symbol}${player.name}"
-                            data-username="${player.name}"
-                            style="display: flex; align-items: center; justify-content: space-between;"
-                            ${currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'secretary', 'officer'].includes(currentUser?.role)) ? 'draggable="true"' : ''}>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                ${photoURL ? `<img src="${photoURL}" alt="avatar" style="width:24px;height:24px;border-radius:50%;">` : ''}
-                                <span class="player-name">
-                                    ${symbol}${player.name}
-                                    ${window.allUserRoles && window.allUserPhotos 
-                                        ? (() => {
-                                            const userRole = window.allUserRoles[player.name];
-                                            const isAdmin = window.allUserAdmins && window.allUserAdmins[player.name];
-                                            const badges = getRoleBadgeImage({ role: userRole, isAdmin });
+            playerListHTML += `
+              <li class="player-${player.type}" 
+                data-original-name="${symbol}${player.name}"
+                data-username="${player.name}"
+                style="display: flex; align-items: center; justify-content: space-between;"
+                ${currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'secretary', 'officer'].includes(currentUser?.role)) ? 'draggable="true"' : ''}>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  ${photoURL ? `<img src="${photoURL}" alt="avatar" style="width:24px;height:24px;border-radius:50%;">` : ''}
+                  <span class="player-name">
+                    ${symbol}${player.name}
+                    ${window.allUserRoles && window.allUserPhotos 
+                      ? (() => {
+                        const userRole = window.allUserRoles[player.name];
+                        const isAdmin = window.allUserAdmins && window.allUserAdmins[player.name];
+                        const badges = getRoleBadgeImage({ role: userRole, isAdmin });
                                             
-                                            return badges.map(badge => 
-                                              `<img src="${badge}" alt="${isAdmin ? 'admin' : userRole}" 
-                                                    style="width: 20px; height: 20px; vertical-align: middle; margin-left: 5px;">`
-                                            ).join('');
-                                        })()
-                                        : ''}
-                                </span>
-                            </div>
-                            ${leaveButton}
-                        </li>
-                    `;
-                } else {
-                    // Empty slot with the option to join
-                    const joinButton = currentUser && canJoinGroup(group) ?
-                        `<button class="join-btn" onclick="joinGroup('${currentSection}', ${groupIndex}, ${i})">Join</button>` : '';
+                        return badges.map(badge => 
+                          `<img src="${badge}" alt="${isAdmin ? 'admin' : userRole}" 
+                            style="width: 20px; height: 20px; vertical-align: middle; margin-left: 5px;">`
+                          ).join('');
+                        })()
+                        : ''}
+                      </span>
+                    </div>
+                    ${leaveButton}
+                  </li>
+                `;
+              } else {
+                // Empty slot with the option to join
+                const joinButton = currentUser && canJoinGroup(group) ?
+                  `<button class="join-btn" onclick="joinGroup('${currentSection}', ${groupIndex}, ${i})">Join</button>` : '';
                 
-                    playerListHTML += `
-                        <li data-empty-slot="true">
-                            <span>- empty -</span>
-                            ${joinButton}
-                        </li>
-                    `;
-                }
+                playerListHTML += `
+                  <li data-empty-slot="true">
+                    <span>- empty -</span>
+                    ${joinButton}
+                  </li>
+                `;
+              }
             }
     
             // Admin/Officer edit button
             const editButton = currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'secretary', 'officer'].includes(currentUser.role)) ?
-                `<button class="btn btn-secondary" style="font-family: 'Math Serif Italic v2'; font-style: italic; font-size: 0.8rem; padding: 0.3rem 0.7rem;" onclick="editGroup('${currentSection}', ${groupIndex})">Edit</button>` : '';
+              `<button class="btn btn-secondary" style="font-family: 'Math Serif Italic v2'; font-style: italic; font-size: 0.8rem; padding: 0.3rem 0.7rem;" onclick="editGroup('${currentSection}', ${groupIndex})">Edit</button>` : '';
     
             // Convert UTC time to local time
             const localTime = convertUTCToLocal(group.timeUTC);
             const groupDate = group.dateLabel ? `<div class="date-label"> ${group.dateLabel}</div>` : '';
     
             div.innerHTML = `
-                <h2>${group.group} ${editButton}</h2>
-                <div class="timezone">${localTime}</div>
-                ${groupDate}
+              <h2>${group.group} ${editButton}</h2>
+              <div class="timezone">${localTime}</div>
+              ${groupDate}
     
-                <ul class="player-list">
-                    ${playerListHTML}
-                </ul>
+              <ul class="player-list">
+                ${playerListHTML}
+              </ul>
             `;
             container.appendChild(div);
         });
     
-        // Enable drag and drop for authorized users
-        if (currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'secretary', 'officer'].includes(currentUser.role))) {
-            enableDragAndDrop();
-        }
+      // Enable drag and drop for authorized users
+      if (currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'secretary', 'officer'].includes(currentUser.role))) {
+        enableDragAndDrop();
+      }
     
-        // Initialize hover profiles for the newly rendered groups
-        initHoverProfiles();
+      // Initialize hover profiles for the newly rendered groups
+      initHoverProfiles();
     }
 
     // Function to edit a group (for admins/officers)
