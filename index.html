@@ -305,7 +305,7 @@
     }
     
     /* Remove borders globally */
-    /* remove this and !important from .player-list li { to restore original behavior */
+    /* remove this and !important from .player-list li { and .hover-card-header { to restore original behavior */
     * {
       border: none !important;
     }
@@ -1245,7 +1245,7 @@
       background: rgba(30, 30, 30, 0.7);
       padding: 0.9rem;
       border-radius: var(--radius-sm);
-      border: 1px solid var(--border-light);
+      border: 1px solid var(--border-light) !important;
     }
     
     .hover-stat span {
@@ -1441,7 +1441,7 @@
   <header>
     <div class="header-container">
       <a href="./" class="header-title" style="text-decoration: none; color: rgb(255, 196, 221); display: flex; align-items: center; gap: 8px;">
-        <img src="assets/images/favicon-32x32.png" alt="Fluffytail Logo" width="24" height="24" style="filter: drop-shadow(0 0 2px rgba(0,0,0,0.5))">
+        <img src="assets/images/favicon-32x32.png" alt="Fluffytail Logo" width="32" height="32" style="filter: drop-shadow(0 0 2px rgba(0,0,0,0.5))">
         <span style="white-space: nowrap;">
           <span class="decorative-symbols" style="font-style: normal;">‧͙⁺˚*･༓☾</span> Fluffytail x Kuri <span class="decorative-symbols" style="font-style: normal;">☽༓･*˚⁺‧͙</span>
         </span>
