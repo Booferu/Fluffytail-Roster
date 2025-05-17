@@ -663,6 +663,7 @@
       margin-left: 0.5rem;
       font-weight: 500;
       border-radius: 6px;
+      vertical-align: middle;
     }
 
     .role-badge.admin {
@@ -685,7 +686,7 @@
         0 2px 4px rgba(0, 0, 0, 0.3),
         inset 0 1px 3px rgb(255, 255, 255),
         inset 0 -1px 3px rgba(0, 0, 0, 0.2);
-      position: absolute;
+      position: relative;
       overflow: hidden;
       text-transform: uppercase;
       font-size: 0.75rem;
@@ -712,12 +713,42 @@
     }
 
     .role-badge.advisor {
-      background-color: #565f7c;
-      color: white;
+      background: linear-gradient(135deg, 
+        #b8bec5 0%, 
+        #a8b4c5 25%, 
+        #c0d2e2 50%, 
+        #b3bbcc 75%, 
+        #7a8da3 100%);
+      color: #000000;
+      font-weight: bold;
+      text-shadow: 0 1px 1px rgb(255, 255, 255);
+      border: 1px solid #D4AF37;
+      box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        inset 0 1px 3px rgb(255, 255, 255),
+        inset 0 -1px 3px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* Optional: Add animated shine effect */
+    .role-badge.advisor::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 50%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: rotate(30deg);
+      animation: shine 3s infinite;
     }
 
     .role-badge.staff {
-      background-color: #cc6b6b;
+      background-color: #543558;
       color: white;
     }
 
@@ -1023,7 +1054,8 @@
     /* Username text styling */
     #floating-user-info .username-display {
       color: var(--accent-secondary) !important; /* Pink accent */
-      font-weight: 500;
+      font-weight: 600;
+      font-size: large;
     }
 
     /* User Dropdown Styles */
@@ -1253,6 +1285,10 @@
       object-fit: cover;
     }
     
+    #hoverClass {
+      margin-right: 0.2rem;
+    }
+
     .hover-name-role {
       flex: 1;
       position: relative;
@@ -1261,6 +1297,27 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 0.25rem;
+    }
+
+    .hover-name-role .role-badge {
+      margin-left: 0 !important;
+    }
+
+    .hover-name-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      align-items: center;
+    }
+
+    #hoverRoleBadgeContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.1rem;
+    }
+
+    #hoverRoleBadgeContainer .role-badge {
+      margin-left: 0 !important;
     }
     
     .hover-card-body {
@@ -1707,9 +1764,11 @@
         <div class="default-avatar" style="display:none"></div>
       </div>
       <div class="hover-name-role">
-        <h3 id="hoverUsername"></h3>
-        <div id="hoverClass" class="hover-class"></div>
-        <span id="hoverRoleBadge" class="role-badge"></span>
+        <div class="hover-name-line">
+          <h3 id="hoverUsername"></h3>
+          <div id="hoverClass" class="hover-class"></div>
+        </div>
+        <div id="hoverRoleBadgeContainer"></div>
       </div>
     </div>
     <div class="hover-card-body">
@@ -2830,7 +2889,7 @@
       const hoverClass = document.getElementById('hoverClass');
       hoverClass.textContent = data.characterClass || 'Class not specified';
 
-      const roleBadge = document.getElementById('hoverRoleBadge');
+      const roleBadge = document.getElementById('hoverRoleBadgeContainer');
 
       // Clear previous badges
       roleBadge.innerHTML = '';
