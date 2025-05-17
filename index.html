@@ -1575,13 +1575,6 @@
           <option value="mercenary">Mercenary</option>
         </select>
       </div>
-      <div class="form-group" id="officerCodeGroup" style="display: none;">
-        <label for="officerCode">Officer Code</label>
-        <input type="password" id="officerCode" placeholder="Enter officer access code">
-        <small style="color: var(--text-tertiary); display: block; margin-top: 0.5rem;">
-          Only required for officer roles. Ask your guild leader for the code.
-        </small>
-      </div>
       <div class="form-actions">
         <button class="btn btn-secondary" onclick="closeModal('registerModal')">Cancel</button>
         <button class="btn btn-primary" id="registerSubmitBtn">Register</button>
@@ -1933,16 +1926,6 @@
       document.getElementById('loginSubmitBtn').addEventListener('click', handleLogin);
       document.getElementById('registerSubmitBtn').addEventListener('click', handleRegister);
       
-      // Register role selection
-      document.getElementById('registerRole').addEventListener('change', function() {
-        const officerCodeGroup = document.getElementById('officerCodeGroup');
-        if (this.value === 'officer') {
-          officerCodeGroup.style.display = 'block';
-        } else {
-          officerCodeGroup.style.display = 'none';
-        }
-      });
-      
       // Admin panel functionality
       document.getElementById('updateRoleBtn').addEventListener('click', updateUserRole);
       document.getElementById('resetRosterBtn').addEventListener('click', resetRoster);
@@ -2218,7 +2201,6 @@
       const password = document.getElementById('registerPassword').value.trim();
       const confirmPassword = document.getElementById('registerConfirmPassword').value.trim();
       const role = document.getElementById('registerRole').value;
-      const officerCode = document.getElementById('officerCode').value.trim();
       const alertElement = document.getElementById('registerAlert');
 
       // Input validation
@@ -2234,12 +2216,6 @@
 
       if (password.length < 6) {
         showAlert(alertElement, 'Password must be at least 6 characters', 'error');
-        return;
-      }
-
-      // Officer code validation (if applicable)
-      if (role === 'officer' && officerCode !== 'YOUR_OFFICER_CODE') {
-        showAlert(alertElement, 'Invalid officer code', 'error');
         return;
       }
 
@@ -2262,7 +2238,6 @@
         document.getElementById('registerUsername').value = '';
         document.getElementById('registerPassword').value = '';
         document.getElementById('registerConfirmPassword').value = '';
-        document.getElementById('officerCode').value = '';
 
         showAlert(alertElement, 'Registration successful!', 'success');
         
