@@ -2935,18 +2935,27 @@
 
       // Avatar handling
       const hoverAvatar = document.getElementById('hoverAvatar');
+      const defaultAvatar = hoverAvatar.nextElementSibling || document.createElement('div');
+
       if (lookupPhoto) {
-        hoverAvatar.src = lookupPhoto;
-        hoverAvatar.style.display = 'block';
-        hoverAvatar.nextElementSibling.style.display = 'none';
+        createSmoothAvatarImage(lookupPhoto, 50).then(smoothUrl => {
+          hoverAvatar.src = smoothUrl;
+          hoverAvatar.style.display = 'block';
+          defaultAvatar.style.display = 'none';
+        }).catch(() => {
+          showDefaultAvatar();
+        });
       } else {
+        showDefaultAvatar();
+      }
+
+      function showDefaultAvatar() {
         const firstLetter = data.username?.charAt(0)?.toUpperCase?.() || '?';
         const colors = ['#FFB900', '#FF8C00', '#F7630C', '#CA5010', '#DA3B01',
                         '#EF6950', '#D13438', '#FF4343', '#E74856', '#E81123'];
         const color = colors[firstLetter.charCodeAt(0) % colors.length] || '#FFB900';
 
         hoverAvatar.style.display = 'none';
-        const defaultAvatar = hoverAvatar.nextElementSibling || document.createElement('div');
         defaultAvatar.className = 'default-avatar';
         defaultAvatar.style.display = 'flex';
         defaultAvatar.style.alignItems = 'center';
