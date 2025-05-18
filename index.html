@@ -762,6 +762,16 @@
       color: white;
     }
 
+    .role-badge.cannoneer {
+      background-color: #777777;
+      color: white;
+    }
+    
+    .role-badge.mission-specialist {
+      background-color: #595bc5;
+      color: white;
+    }
+
     .role-badge.member {
       background-color: #3f853c;
       color: white;
@@ -1354,6 +1364,7 @@
     }
 
     .hover-class {
+      vertical-align: middle;
       font-size: 0.9rem;
       margin-top: 0.25rem;
       color: rgba(255, 148, 178, 1) !important;
@@ -1699,6 +1710,8 @@
           <select id="adminRole" style="font-style: italic; width: 100%; padding: 0.8rem; border-radius: var(--radius-sm); background-color: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-primary); font-family: inherit;">
             <option value="member">Member</option>
             <option value="mercenary">Mercenary</option>
+            <option value="mission-specialist">Mission Specialist</option>
+            <option value="cannoneer">Cannoneer</option>
             <option value="officer">Officer</option>
             <option value="secretary">Secretary</option>
             <option value="staff">Staff</option>
@@ -2104,6 +2117,10 @@
           roleBadge += '<span class="role-badge secretary">Secretary</span>';
         } else if (currentUser.role === 'officer') {
           roleBadge += '<span class="role-badge officer">Officer</span>';
+        } else if (currentUser.role === 'cannoneer') {
+          roleBadge += '<span class="role-badge cannoneer">Cannoneer</span>';
+        } else if (currentUser.role === 'mission-specialist') {
+          roleBadge += '<span class="role-badge mission-specialist">Mission Specialist</span>';
         } else if (currentUser.role === 'member') {
           roleBadge += '<span class="role-badge member">Member</span>';
         } else if (currentUser.role === 'mercenary') {
@@ -2431,12 +2448,14 @@
     
           // Define assignable roles for each rank
           const assignableRoles = {
-            'admin': ['guild-master', 'advisor', 'staff', 'secretary', 'officer', 'member', 'mercenary'],
-            'guild-master': ['guild-master', 'advisor', 'staff', 'secretary', 'officer', 'member', 'mercenary'],
-            'advisor': ['advisor', 'staff', 'secretary', 'officer', 'member', 'mercenary'],
-            'staff': ['staff', 'secretary', 'officer', 'member', 'mercenary'],
-            'secretary': ['secretary', 'officer', 'member', 'mercenary'],
-            'officer': ['officer', 'member', 'mercenary'],
+            'admin': ['guild-master', 'advisor', 'staff', 'secretary', 'officer', 'cannoneer', 'mission-specialist', 'member', 'mercenary'],
+            'guild-master': ['guild-master', 'advisor', 'staff', 'secretary', 'officer', 'cannoneer', 'mission-specialist', 'member', 'mercenary'],
+            'advisor': ['advisor', 'staff', 'secretary', 'officer', 'cannoneer', 'mission-specialist', 'member', 'mercenary'],
+            'staff': ['staff', 'secretary', 'officer', 'cannoneer', 'mission-specialist', 'member', 'mercenary'],
+            'secretary': ['secretary', 'officer', 'cannoneer', 'mission-specialist', 'member', 'mercenary'],
+            'officer': ['officer', 'cannoneer', 'mission-specialist', 'member', 'mercenary'],
+            'cannoneer': [],
+            'mission-specialist': [],
             'member': [],
             'mercenary': []
           };
@@ -2479,6 +2498,8 @@
         "staff": "assets/images/badges/staff.png",
         "secretary": "assets/images/badges/secretary.png",
         "officer": "assets/images/badges/officer.png",
+        "cannoneer": "assets/images/badges/cannoneer.png",
+        "mission-specialist": "assets/images/badges/mission-specialist.png",
         "member": "assets/images/badges/member.png",
         "mercenary": "assets/images/badges/mercenary.png"
       };
