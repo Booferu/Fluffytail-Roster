@@ -3487,25 +3487,36 @@
           });
 
           if (avatarUrl) {
-            try {
-              const smoothUrl = await createSmoothAvatarImage(avatarUrl);
+            const isGif = avatarUrl.toLowerCase().endsWith('.gif');
+            if (isGif) {
               userItem.innerHTML = `
-                <img src="${smoothUrl}" class="user-list-avatar" alt="${user.username}">
+                <img src="${avatarUrl}" class="user-list-avatar" alt="${user.username}">
                 <span class="user-list-name">${user.username}</span>
                 ${badges.map(badge =>
                   `<img src="${badge}" class="user-list-role" alt="badge" style="width: 24px; height: 24px; margin-left: 5px;">`
                 ).join('')}
               `;
-            } catch {
-              userItem.innerHTML = `
-                <div class="user-list-avatar" style="background-color: ${stringToColor(user.username)}; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-                  ${user.username.charAt(0).toUpperCase()}
-                </div>
-                <span class="user-list-name">${user.username}</span>
-                ${badges.map(badge =>
-                  `<img src="${badge}" class="user-list-role" alt="badge" style="width: 24px; height: 24px; margin-left: 5px;">`
-                ).join('')}
-              `;
+            } else {
+              try {
+                const smoothUrl = await createSmoothAvatarImage(avatarUrl);
+                userItem.innerHTML = `
+                  <img src="${smoothUrl}" class="user-list-avatar" alt="${user.username}">
+                  <span class="user-list-name">${user.username}</span>
+                  ${badges.map(badge =>
+                    `<img src="${badge}" class="user-list-role" alt="badge" style="width: 24px; height: 24px; margin-left: 5px;">`
+                  ).join('')}
+                `;
+              } catch {
+                userItem.innerHTML = `
+                  <div class="user-list-avatar" style="background-color: ${stringToColor(user.username)}; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                    ${user.username.charAt(0).toUpperCase()}
+                  </div>
+                  <span class="user-list-name">${user.username}</span>
+                  ${badges.map(badge =>
+                    `<img src="${badge}" class="user-list-role" alt="badge" style="width: 24px; height: 24px; margin-left: 5px;">`
+                  ).join('')}
+                `;
+              }
             }
           } else {
             userItem.innerHTML = `
@@ -3564,25 +3575,36 @@
             });
 
             if (avatarUrl) {
-              try {
-                const smoothUrl = await createSmoothAvatarImage(avatarUrl);
+              const isGif = avatarUrl.toLowerCase().endsWith('.gif');
+              if (isGif) {
                 userItem.innerHTML = `
-                  <img src="${smoothUrl}" class="user-list-avatar" alt="${user.username}">
+                  <img src="${avatarUrl}" class="user-list-avatar" alt="${user.username}">
                   <span class="user-list-name">${user.username}</span>
                   ${badges.map(badge =>
                     `<img src="${badge}" class="user-list-role" alt="badge" style="width: 24px; height: 24px; margin-left: 5px;">`
                   ).join('')}
                 `;
-              } catch {
-                userItem.innerHTML = `
-                  <div class="user-list-avatar" style="background-color: ${stringToColor(user.username)}; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-                    ${user.username.charAt(0).toUpperCase()}
-                  </div>
-                  <span class="user-list-name">${user.username}</span>
-                  ${badges.map(badge =>
-                    `<img src="${badge}" class="user-list-role" alt="badge" style="width: 24px; height: 24px; margin-left: 5px;">`
-                  ).join('')}
-                `;
+              } else {
+                try {
+                  const smoothUrl = await createSmoothAvatarImage(avatarUrl);
+                  userItem.innerHTML = `
+                    <img src="${smoothUrl}" class="user-list-avatar" alt="${user.username}">
+                    <span class="user-list-name">${user.username}</span>
+                    ${badges.map(badge =>
+                      `<img src="${badge}" class="user-list-role" alt="badge" style="width: 24px; height: 24px; margin-left: 5px;">`
+                    ).join('')}
+                  `;
+                } catch {
+                  userItem.innerHTML = `
+                    <div class="user-list-avatar" style="background-color: ${stringToColor(user.username)}; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                      ${user.username.charAt(0).toUpperCase()}
+                    </div>
+                    <span class="user-list-name">${user.username}</span>
+                    ${badges.map(badge =>
+                      `<img src="${badge}" class="user-list-role" alt="badge" style="width: 24px; height: 24px; margin-left: 5px;">`
+                    ).join('')}
+                  `;
+                }
               }
             } else {
               userItem.innerHTML = `
