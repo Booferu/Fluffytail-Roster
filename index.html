@@ -2938,13 +2938,20 @@
       const defaultAvatar = hoverAvatar.nextElementSibling || document.createElement('div');
 
       if (lookupPhoto) {
-        createSmoothAvatarImage(lookupPhoto, 50).then(smoothUrl => {
-          hoverAvatar.src = smoothUrl;
+        const isGif = lookupPhoto.toLowerCase().endsWith('.gif');
+        if (isGif) {
+          hoverAvatar.src = lookupPhoto;
           hoverAvatar.style.display = 'block';
           defaultAvatar.style.display = 'none';
-        }).catch(() => {
-          showDefaultAvatar();
-        });
+        } else {
+          createSmoothAvatarImage(lookupPhoto, 50).then(smoothUrl => {
+            hoverAvatar.src = smoothUrl;
+            hoverAvatar.style.display = 'block';
+            defaultAvatar.style.display = 'none';
+          }).catch(() => {
+            showDefaultAvatar();
+          });
+        }
       } else {
         showDefaultAvatar();
       }
