@@ -2935,34 +2935,18 @@
 
       // Avatar handling
       const hoverAvatar = document.getElementById('hoverAvatar');
-      const defaultAvatar = hoverAvatar.nextElementSibling || document.createElement('div');
-
       if (lookupPhoto) {
-        const isGif = lookupPhoto.toLowerCase().endsWith('.gif');
-        if (isGif) {
-          hoverAvatar.src = lookupPhoto;
-          hoverAvatar.style.display = 'block';
-          defaultAvatar.style.display = 'none';
-        } else {
-          createSmoothAvatarImage(lookupPhoto, 50).then(smoothUrl => {
-            hoverAvatar.src = smoothUrl;
-            hoverAvatar.style.display = 'block';
-            defaultAvatar.style.display = 'none';
-          }).catch(() => {
-            showDefaultAvatar();
-          });
-        }
+        hoverAvatar.src = lookupPhoto;
+        hoverAvatar.style.display = 'block';
+        hoverAvatar.nextElementSibling.style.display = 'none';
       } else {
-        showDefaultAvatar();
-      }
-
-      function showDefaultAvatar() {
         const firstLetter = data.username?.charAt(0)?.toUpperCase?.() || '?';
         const colors = ['#FFB900', '#FF8C00', '#F7630C', '#CA5010', '#DA3B01',
                         '#EF6950', '#D13438', '#FF4343', '#E74856', '#E81123'];
         const color = colors[firstLetter.charCodeAt(0) % colors.length] || '#FFB900';
 
         hoverAvatar.style.display = 'none';
+        const defaultAvatar = hoverAvatar.nextElementSibling || document.createElement('div');
         defaultAvatar.className = 'default-avatar';
         defaultAvatar.style.display = 'flex';
         defaultAvatar.style.alignItems = 'center';
@@ -3094,7 +3078,7 @@
               `<button class="leave-btn" onclick="leaveGroup('${currentSection}', ${groupIndex})">Leave</button>` : '';
                 
             const symbol = player.type === 'guild' ? '✔ ' : player.type === 'merc' ? '✦ ' : '';
-            const photoURL = (window.allUserPhotos && window.allUserPhotos[player.name.toLowerCase()]) || null;
+            const photoURL = (window.allUserPhotos && window.allUserPhotos[player.name]) || null;
     
             playerListHTML += `
               <li class="player-${player.type}" 
@@ -3108,8 +3092,8 @@
                     ${symbol}${player.name}
                     ${window.allUserRoles && window.allUserPhotos 
                       ? (() => {
-                        const userRole = window.allUserRoles[player.name.toLowerCase()];
-                        const isAdmin = window.allUserAdmins && window.allUserAdmins[player.name.toLowerCase()];
+                        const userRole = window.allUserRoles[player.name];
+                        const isAdmin = window.allUserAdmins && window.allUserAdmins[player.name];
                         const badges = getRoleBadgeImage({ role: userRole, isAdmin });
                                             
                         return badges.map(badge => 
@@ -3431,34 +3415,7 @@
       
       // No need to manually re-render - the Firebase listener will handle it
     }
-
-    // Smooth avatar rendering using canvas
-    async function createSmoothAvatarImage(src, targetSize = 40) {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.crossOrigin = 'anonymous'; // Important for remote images like Imgur
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          canvas.width = targetSize;
-          canvas.height = targetSize;
-
-          const ctx = canvas.getContext('2d');
-          ctx.imageSmoothingEnabled = true;
-          ctx.imageSmoothingQuality = 'high';
-
-          const side = Math.min(img.width, img.height);
-          const sx = (img.width - side) / 2;
-          const sy = (img.height - side) / 2;
-
-          ctx.drawImage(img, sx, sy, side, side, 0, 0, targetSize, targetSize);
-
-          resolve(canvas.toDataURL('image/png'));
-        };
-        img.onerror = reject;
-        img.src = src;
-      });
-    }
-
+      
     // Function to load and display all users
     async function loadAllUsers() {
       try {
@@ -3471,7 +3428,6 @@
           return;
         }
         
-        // Clear the list only once at the beginning
         userList.innerHTML = '';
         
         // Convert to array and sort alphabetically
@@ -3479,11 +3435,70 @@
           .filter(user => user.username) // Only include users with usernames
           .sort((a, b) => a.username.localeCompare(b.username));
         
-        // Function to render users
-        const renderUsers = (usersArray, targetElement) => {
-          targetElement.innerHTML = ''; // Clear before rendering
+        userArray.forEach(user => {
+          const userItem = document.createElement('div');
+          userItem.className = 'user-list-item';
           
-          usersArray.forEach(user => {
+          // Make item draggable only for admins/officers
+          if (currentUser && (currentUser.isAdmin || ['guild-master', 'advisor', 'staff', 'secretary', 'officer'].includes(currentUser.role))) {
+            userItem.draggable = true;
+            userItem.style.cursor = 'grab';
+            userItem.addEventListener('dragstart', handleUserDragStart);
+          }
+          
+          const avatarUrl = user.photoURL || '';
+          const badges = getRoleBadgeImage({ 
+            role: user.role, 
+            isAdmin: user.isAdmin || false 
+          });
+          
+          userItem.innerHTML = `
+            ${avatarUrl ? `<img src="${avatarUrl}" class="user-list-avatar" alt="${user.username}">` : 
+              `<div class="user-list-avatar" style="background-color: ${stringToColor(user.username)}; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">${user.username.charAt(0).toUpperCase()}</div>`}
+            <span class="user-list-name">${user.username}</span>
+            ${badges.length > 0 ? 
+              badges.map(badge => 
+                `<img src="${badge}" class="user-list-role" alt="badge" style="width: 24px; height: 24px; margin-left: 5px;">`
+              ).join('') 
+              : ''}
+          `;
+          
+          // Store user data on the element
+          userItem.dataset.username = user.username;
+          userItem.dataset.role = user.role;
+          
+          userList.appendChild(userItem);
+        });
+        
+        // Rest of the function remains the same...
+        // Set up realtime updates
+        database.ref('users').on('value', (snapshot) => {
+          const updatedUsers = snapshot.val() || {};
+          const updatedList = document.getElementById('userList');
+          updatedList.innerHTML = '';
+          
+          // Update our global user data objects
+          window.allUserPhotos = {};
+          window.allUserRoles = {};
+          window.allUserAdmins = {};
+          
+          const updatedArray = Object.values(updatedUsers)
+            .filter(user => user.username)
+            .sort((a, b) => a.username.localeCompare(b.username));
+          
+          // First update our global user data
+          updatedArray.forEach(user => {
+            if (user.username) {
+              if (user.photoURL) {
+                window.allUserPhotos[user.username] = user.photoURL;
+              }
+              window.allUserRoles[user.username] = user.role;
+              window.allUserAdmins[user.username] = user.isAdmin || false;
+            }
+          });
+          
+          // Then render the user list
+          updatedArray.forEach(user => {
             const userItem = document.createElement('div');
             userItem.className = 'user-list-item';
             
@@ -3516,39 +3531,8 @@
             userItem.dataset.role = user.role;
             userItem.dataset.isAdmin = user.isAdmin || false;
             
-            targetElement.appendChild(userItem);
+            updatedList.appendChild(userItem);
           });
-        };
-        
-        // Initial render
-        renderUsers(userArray, userList);
-        
-        // Set up realtime updates - modified to prevent duplicates
-        database.ref('users').on('value', (snapshot) => {
-          const updatedUsers = snapshot.val() || {};
-          
-          // Update our global user data objects
-          window.allUserPhotos = {};
-          window.allUserRoles = {};
-          window.allUserAdmins = {};
-          
-          const updatedArray = Object.values(updatedUsers)
-            .filter(user => user.username)
-            .sort((a, b) => a.username.localeCompare(b.username));
-          
-          // Update global user data
-          updatedArray.forEach(user => {
-            if (user.username) {
-              if (user.photoURL) {
-                window.allUserPhotos[user.username.toLowerCase()] = user.photoURL;
-              }
-              window.allUserRoles[user.username.toLowerCase()] = user.role;
-              window.allUserAdmins[user.username.toLowerCase()] = user.isAdmin || false;
-            }
-          });
-          
-          // Re-render the user list
-          renderUsers(updatedArray, userList);
         });
         
       } catch (error) {
