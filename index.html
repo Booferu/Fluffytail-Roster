@@ -1109,79 +1109,80 @@
       border-radius: var(--radius-md) var(--radius-md) 0 0;
     }
 
-#floating-user-info {
-  z-index: 40;
-  max-width: 300px; /* Limit the maximum width */
-}
+    #floating-user-info {
+      z-index: 40;
+      max-width: 300px; /* Limit the maximum width */
+    }
 
-/* Style for the floating user info container */
-#floating-user-info #user-info-clickable {
-  top: 102.4px !important;
-  background: rgba(30, 30, 30, 0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  padding: 11px 15px;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.3s ease;
-  width: auto; /* Let it size naturally up to max-width */
-  display: inline-flex; /* Use flex for better layout control */
-  flex-wrap: wrap; /* Allow content to wrap */
-  align-items: center; /* Center items vertically */
-}
+    /* Style for the floating user info container */
+    #floating-user-info #user-info-clickable {
+      top: 102.4px !important;
+      background: rgba(30, 30, 30, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 11px 15px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+      width: auto; /* Let it size naturally up to max-width */
+      display: inline-flex; /* Use flex for better layout control */
+      flex-wrap: wrap; /* Allow content to wrap */
+      align-items: center; /* Center items vertically */
+    }
 
-/* Hover effect */
-#floating-user-info #user-info-clickable:hover {
-  background: rgba(40, 40, 40, 0.8);
-  box-shadow: var(--shadow-md);
-}
+    /* Hover effect */
+    #floating-user-info #user-info-clickable:hover {
+      background: rgba(40, 40, 40, 0.8);
+      box-shadow: var(--shadow-md);
+    }
 
-/* Adjust avatar positioning */
-#floating-user-info .user-avatar {
-  margin-right: 8px;
-  flex-shrink: 0; /* Prevent avatar from shrinking */
-}
+    /* Adjust avatar positioning */
+    #floating-user-info .user-avatar {
+      margin-right: 6px;
+      flex-shrink: 0; /* Prevent avatar from shrinking */
+    }
 
-/* Username and badges container */
-#floating-user-info .user-info-content {
-  display: flex;
-  flex-direction: column;
-  min-width: 0; /* Allow text truncation */
-  flex-grow: 1;
-}
+    /* Username and badges container */
+    #floating-user-info .user-info-content {
+      display: flex;
+      flex-direction: column;
+      min-width: 0; /* Allow text truncation */
+      flex-grow: 1;
+    }
 
-/* Username text styling */
-#floating-user-info .username-display {
-  color: var(--accent-secondary) !important;
-  font-weight: 600;
-  font-size: large;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
+    /* Username text styling */
+    #floating-user-info .username-display {
+      color: var(--accent-secondary) !important;
+      font-weight: 600;
+      font-size: large;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
 
-/* Badges container */
-#floating-user-info .badges-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px; /* Small gap between badges */
-  margin-top: 4px; /* Space between name and badges */
-  align-items: center;
-}
+    /* Badges container */
+    #floating-user-info .badges-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px; /* Small gap between badges */
+      margin-top: 4px; /* Space between name and badges */
+      align-items: center;
+    }
 
-/* Individual badge styling */
-#floating-user-info .role-badge {
-  margin-left: 0 !important; /* Remove left margin */
-  flex-shrink: 0; /* Prevent badges from shrinking */
-}
+    /* Individual badge styling */
+    #floating-user-info .role-badge {
+      margin-left: 0 !important; /* Remove left margin */
+      flex-shrink: 0; /* Prevent badges from shrinking */
+      margin-right: 3px;
+    }
 
-/* Badge images */
-#floating-user-info .role-badge img {
-  width: 20px;
-  height: 20px;
-  object-fit: contain; /* Prevent stretching */
-}
+    /* Badge images */
+    #floating-user-info .role-badge img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain; /* Prevent stretching */
+    }
 
     /* User Dropdown Styles */
     .user-dropdown {
