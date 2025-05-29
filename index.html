@@ -49,7 +49,7 @@
       line-height: 1.6;
       min-height: 100vh;
 
-      background-image: url(assets/images/background/bg.webp);
+      /* background-image: url(assets/images/background/bg.webp); */
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -1720,6 +1720,26 @@
       transform: scale(0.80);
       background-color: rgba(125, 168, 248, 0.2);
     }
+
+    .background-layer {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: opacity 1.5s ease-in-out;
+      z-index: -1;
+      opacity: 0;
+    }
+
+    #bg-layer-1 {
+      z-index: -2;
+    }
+    #bg-layer-2 {
+      z-index: -1;
+    }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
@@ -1730,6 +1750,9 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 </head>
 <body>
+  <div id="bg-layer-1" class="background-layer"></div>
+  <div id="bg-layer-2" class="background-layer"></div>
+
   <div id="background-image" style="
     position: fixed;
     top: 0; left: 0;
@@ -4124,45 +4147,53 @@
     let backgroundImages = [];
     let loadedCount = 0;
 
-    const bgElement = document.getElementById("background-image");
+    const bg1 = document.getElementById("bg-layer-1");
+    const bg2 = document.getElementById("bg-layer-2");
+    let activeLayer = bg1;
+    let nextLayer = bg2;
 
+    // Preload images and use only successful ones
     possibleImages.forEach(src => {
       const img = new Image();
       img.onload = () => {
         backgroundImages.push(src);
-        checkIfReady();
+        checkReady();
       };
-      img.onerror = () => {
-        checkIfReady();
-      };
+      img.onerror = () => checkReady();
       img.src = backgroundDir + src;
     });
 
-    function checkIfReady() {
+    function checkReady() {
       loadedCount++;
       if (loadedCount === possibleImages.length && backgroundImages.length > 0) {
-        startBackgroundRotation();
+        startCrossfadeRotation();
       }
     }
 
-    function startBackgroundRotation() {
-      let shuffledImages = shuffleArray([...backgroundImages]);
-      let currentIndex = 0;
+    function startCrossfadeRotation() {
+      let shuffled = shuffleArray([...backgroundImages]);
+      let index = 0;
 
-      bgElement.style.backgroundImage = `url(${backgroundDir}${shuffledImages[currentIndex]})`;
+      activeLayer.style.backgroundImage = `url(${backgroundDir}${shuffled[index]})`;
+      activeLayer.style.opacity = 1;
 
       setInterval(() => {
-        bgElement.style.opacity = 0;
-        setTimeout(() => {
-          currentIndex++;
-          if (currentIndex >= shuffledImages.length) {
-            shuffledImages = shuffleArray([...backgroundImages]);
-            currentIndex = 0;
-          }
-          bgElement.style.backgroundImage = `url(${backgroundDir}${shuffledImages[currentIndex]})`;
-          bgElement.style.opacity = 1;
-        }, 1500);
-      }, 10000); // Change image every 10 seconds (time is in milliseconds)
+        index++;
+        if (index >= shuffled.length) {
+          shuffled = shuffleArray([...backgroundImages]);
+          index = 0;
+        }
+
+        // Prepare next layer
+        nextLayer.style.backgroundImage = `url(${backgroundDir}${shuffled[index]})`;
+        nextLayer.style.opacity = 1;
+
+        // Fade out current layer
+        activeLayer.style.opacity = 0;
+
+        // Swap layers for next transition
+        [activeLayer, nextLayer] = [nextLayer, activeLayer];
+      }, 10000); // Change this to adjust interval (ms)
     }
 
     function shuffleArray(arr) {
