@@ -4130,19 +4130,9 @@
 
     // Random background image rotation
     const backgroundDir = "assets/images/background/";
-    const possibleImages = [
-      "bg.webp",
-      "bg2.webp",
-      "bg3.webp",
-      "bg4.webp",
-      "bg5.webp",
-      "bg6.webp",
-      "bg7.webp",
-      "bg8.webp",
-      "bg9.webp",
-      "bg10.webp",
-      "bg11.webp" // even if these don't exist yet
-    ];
+    const MAX_IMAGES = 100;
+
+    const possibleImages = Array.from({ length: MAX_IMAGES }, (_, i) => `bg${i + 1}.webp`);
 
     let backgroundImages = [];
     let loadedCount = 0;
