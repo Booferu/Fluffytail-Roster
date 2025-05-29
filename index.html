@@ -1730,6 +1730,17 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 </head>
 <body>
+  <div id="background-image" style="
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: -1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: opacity 1.5s ease-in-out;
+    opacity: 1;
+  "></div>
   <div id="userSidebar">
     <div class="sidebar-header">
       <h3>Users</h3>
@@ -4093,6 +4104,75 @@
       
     // Initial load
     document.addEventListener('DOMContentLoaded', init);
+
+    // Random background image rotation
+    const backgroundDir = "assets/images/background/";
+    const possibleImages = [
+      "bg.webp",
+      "bg2.webp",
+      "bg3.webp",
+      "bg4.webp",
+      "bg5.webp",
+      "bg6.webp",
+      "bg7.webp",
+      "bg8.webp",
+      "bg9.webp",
+      "bg10.webp",
+      "bg11.webp" // even if these don't exist yet
+    ];
+
+    let backgroundImages = [];
+    let loadedCount = 0;
+
+    const bgElement = document.getElementById("background-image");
+
+    possibleImages.forEach(src => {
+      const img = new Image();
+      img.onload = () => {
+        backgroundImages.push(src);
+        checkIfReady();
+      };
+      img.onerror = () => {
+        checkIfReady();
+      };
+      img.src = backgroundDir + src;
+    });
+
+    function checkIfReady() {
+      loadedCount++;
+      if (loadedCount === possibleImages.length && backgroundImages.length > 0) {
+        startBackgroundRotation();
+      }
+    }
+
+    function startBackgroundRotation() {
+      let shuffledImages = shuffleArray([...backgroundImages]);
+      let currentIndex = 0;
+
+      bgElement.style.backgroundImage = `url(${backgroundDir}${shuffledImages[currentIndex]})`;
+
+      setInterval(() => {
+        bgElement.style.opacity = 0;
+        setTimeout(() => {
+          currentIndex++;
+          if (currentIndex >= shuffledImages.length) {
+            shuffledImages = shuffleArray([...backgroundImages]);
+            currentIndex = 0;
+          }
+          bgElement.style.backgroundImage = `url(${backgroundDir}${shuffledImages[currentIndex]})`;
+          bgElement.style.opacity = 1;
+        }, 1500);
+      }, 10000); // Change image every 10 seconds (time is in milliseconds)
+    }
+
+    function shuffleArray(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
   </script>
 </body>
 </html>
