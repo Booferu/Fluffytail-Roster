@@ -4174,8 +4174,15 @@
       let shuffled = shuffleArray([...backgroundImages]);
       let index = 0;
 
+      // Show the first background immediately
+      activeLayer.style.transition = "none"; // disable transition for first load
       activeLayer.style.backgroundImage = `url(${backgroundDir}${shuffled[index]})`;
       activeLayer.style.opacity = 1;
+
+      // Restore transition for future fades
+      setTimeout(() => {
+        activeLayer.style.transition = "opacity 1.5s ease-in-out";
+      }, 100); // allow it to apply on next cycle
 
       setInterval(() => {
         index++;
