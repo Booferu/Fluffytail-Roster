@@ -53,7 +53,7 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      background-attachment: fixed; /* Optional: enables subtle parallax effect */
+      background-attachment: fixed; /* enables subtle parallax effect */
     }
 
     /* Header styles */
@@ -80,9 +80,9 @@
       align-items: center;
       font-size: 1.5rem;
       font-weight: 600;
-      padding-left: 0px; /* Make space for icon */
-      cursor: pointer; /* Shows it's clickable */
-      transition: transform 0.2s ease; /* Optional: Add hover effect */
+      padding-left: 0px;
+      cursor: pointer;
+      transition: transform 0.2s ease; /* hover effect */
       overflow: hidden;
 
       background: linear-gradient(to right, rgb(141, 238, 255), rgb(255, 196, 221));
@@ -93,7 +93,7 @@
     }
 
     .header-title:hover {
-      text-shadow: 0 0 15px rgba(135, 247, 255, 0.4); /* Optional: Glow effect */
+      text-shadow: 0 0 15px rgba(135, 247, 255, 0.4); /* Glow effect */
     }
     
     .header-title::before {
@@ -107,7 +107,7 @@
       background-size: contain;
       background-repeat: no-repeat;
       filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
-      cursor: pointer; /* Makes header icon clickable */
+      cursor: pointer;
     }
     
     /* Main container styles */
@@ -754,7 +754,7 @@
       letter-spacing: 0.5px;
     }
 
-    /* Optional: Add animated shine effect */
+    /* animated shine effect */
     .role-badge.guild-master::after {
       content: '';
       position: absolute;
@@ -795,7 +795,7 @@
       letter-spacing: 0.5px;
     }
 
-    /* Optional: Add animated shine effect */
+    /* animated shine effect */
     .role-badge.advisor::after {
       content: '';
       position: absolute;
@@ -920,9 +920,9 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 5px; /* Same height as other gradients */
+      height: 5px;
       background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-      z-index: 2; /* Ensures it appears above the sidebar content */
+      z-index: 2;
     }
 
     .sidebar-header {
@@ -952,8 +952,8 @@
       padding: 0.5rem;
       overflow-y: auto;
       flex-grow: 1;
-      scrollbar-gutter: stable; /* Prevents content shift when scrollbar appears */
-      padding-right: 4px; /* Add small padding to prevent scrollbar overlapping content */
+      scrollbar-gutter: stable;
+      padding-right: 4px;
     }
 
     /* User list items */
@@ -1088,7 +1088,7 @@
     }
 
     #user-info-clickable {
-      position: relative; /* Needed for absolute positioning of the gradient */
+      position: relative;
       padding: 8px 12px;
       background: rgba(30, 30, 30, 0.7);
       backdrop-filter: blur(10px);
@@ -1139,14 +1139,14 @@
     /* Adjust avatar positioning */
     #floating-user-info .user-avatar {
       margin-right: 6px;
-      flex-shrink: 0; /* Prevent avatar from shrinking */
+      flex-shrink: 0;
     }
 
     /* Username and badges container */
     #floating-user-info .user-info-content {
       display: flex;
       flex-direction: column;
-      min-width: 0; /* Allow text truncation */
+      min-width: 0;
       flex-grow: 1;
     }
 
@@ -1165,15 +1165,15 @@
     #floating-user-info .badges-container {
       display: flex;
       flex-wrap: wrap;
-      gap: 4px; /* Small gap between badges */
-      margin-top: 4px; /* Space between name and badges */
+      gap: 4px;
+      margin-top: 4px;
       align-items: center;
     }
 
     /* Individual badge styling */
     #floating-user-info .role-badge {
       margin-left: 0 !important;
-      flex-shrink: 0; /* Prevent badges from shrinking */
+      flex-shrink: 0;
       margin-right: 3px;
     }
 
@@ -1181,7 +1181,7 @@
     #floating-user-info .role-badge img {
       width: 20px;
       height: 20px;
-      object-fit: contain; /* Prevent stretching */
+      object-fit: contain;
     }
 
     /* User Dropdown Styles */
@@ -1249,8 +1249,8 @@
       cursor: pointer;
       padding: 0;
       margin: 0;
-      box-sizing: border-box; /* Include border in dimensions */
-      background: var(--bg-tertiary); /* Fallback background */
+      box-sizing: border-box;
+      background: var(--bg-tertiary);
     }
 
     .dropdown-avatar:hover {
@@ -1277,9 +1277,9 @@
       height: 100%;
       object-fit: cover;
       transition: inherit;
-      display: block; /* Remove inline spacing */
-      min-width: 100%; /* Ensure full coverage */
-      min-height: 100%; /* Ensure full coverage */
+      display: block;
+      min-width: 100%;
+      min-height: 100%;
     }
 
     .dropdown-avatar .default-avatar {
@@ -1291,8 +1291,8 @@
       font-size: 40px;
       font-weight: bold;
       transition: inherit;
-      margin: 0; /* Remove any default margins */
-      flex: 1; /* Fill available space */
+      margin: 0;
+      flex: 1;
     }
 
     .avatar-edit-icon {
@@ -1320,7 +1320,7 @@
     }
 
     .avatar-edit-icon:hover svg {
-      opacity: 1;     /* Full opacity on hover */
+      opacity: 1;
     }
 
     .dropdown-divider {
@@ -2740,7 +2740,7 @@
 
         showAlert(alertElement, 'Registration successful!', 'success');
         
-        // Optional: Auto-login
+        // Auto-login
         currentUser = {
           uid: userCredential.user.uid,
           username: username,
@@ -4121,7 +4121,7 @@
       if (localStorage.getItem('openAdminModal')) {
         localStorage.removeItem('openAdminModal');
         openModal('adminModal');
-        // Optional: Reset URL if needed
+        // Reset URL if needed
         history.replaceState(null, null, ' ');
       }
     });
