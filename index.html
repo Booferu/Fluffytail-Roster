@@ -53,7 +53,7 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      background-attachment: fixed;
+      background-attachment: fixed; /* Optional: enables subtle parallax effect */
     }
 
     /* Header styles */
@@ -80,9 +80,9 @@
       align-items: center;
       font-size: 1.5rem;
       font-weight: 600;
-      padding-left: 0px;
-      cursor: pointer;
-      transition: transform 0.2s ease; /* hover effect */
+      padding-left: 0px; /* Make space for icon */
+      cursor: pointer; /* Shows it's clickable */
+      transition: transform 0.2s ease; /* Optional: Add hover effect */
       overflow: hidden;
 
       background: linear-gradient(to right, rgb(141, 238, 255), rgb(255, 196, 221));
@@ -93,7 +93,7 @@
     }
 
     .header-title:hover {
-      text-shadow: 0 0 15px rgba(135, 247, 255, 0.4); /* Glow effect */
+      text-shadow: 0 0 15px rgba(135, 247, 255, 0.4); /* Optional: Glow effect */
     }
     
     .header-title::before {
@@ -107,7 +107,7 @@
       background-size: contain;
       background-repeat: no-repeat;
       filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
-      cursor: pointer;
+      cursor: pointer; /* Makes header icon clickable */
     }
     
     /* Main container styles */
@@ -754,7 +754,7 @@
       letter-spacing: 0.5px;
     }
 
-    /* animated shine effect */
+    /* Optional: Add animated shine effect */
     .role-badge.guild-master::after {
       content: '';
       position: absolute;
@@ -795,7 +795,7 @@
       letter-spacing: 0.5px;
     }
 
-    /* animated shine effect */
+    /* Optional: Add animated shine effect */
     .role-badge.advisor::after {
       content: '';
       position: absolute;
@@ -920,9 +920,9 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 5px;
+      height: 5px; /* Same height as other gradients */
       background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-      z-index: 2;
+      z-index: 2; /* Ensures it appears above the sidebar content */
     }
 
     .sidebar-header {
@@ -952,8 +952,8 @@
       padding: 0.5rem;
       overflow-y: auto;
       flex-grow: 1;
-      scrollbar-gutter: stable;
-      padding-right: 4px;
+      scrollbar-gutter: stable; /* Prevents content shift when scrollbar appears */
+      padding-right: 4px; /* Add small padding to prevent scrollbar overlapping content */
     }
 
     /* User list items */
@@ -1088,7 +1088,7 @@
     }
 
     #user-info-clickable {
-      position: relative;
+      position: relative; /* Needed for absolute positioning of the gradient */
       padding: 8px 12px;
       background: rgba(30, 30, 30, 0.7);
       backdrop-filter: blur(10px);
@@ -1139,14 +1139,14 @@
     /* Adjust avatar positioning */
     #floating-user-info .user-avatar {
       margin-right: 6px;
-      flex-shrink: 0;
+      flex-shrink: 0; /* Prevent avatar from shrinking */
     }
 
     /* Username and badges container */
     #floating-user-info .user-info-content {
       display: flex;
       flex-direction: column;
-      min-width: 0;
+      min-width: 0; /* Allow text truncation */
       flex-grow: 1;
     }
 
@@ -1165,15 +1165,15 @@
     #floating-user-info .badges-container {
       display: flex;
       flex-wrap: wrap;
-      gap: 4px;
-      margin-top: 4px;
+      gap: 4px; /* Small gap between badges */
+      margin-top: 4px; /* Space between name and badges */
       align-items: center;
     }
 
     /* Individual badge styling */
     #floating-user-info .role-badge {
       margin-left: 0 !important;
-      flex-shrink: 0;
+      flex-shrink: 0; /* Prevent badges from shrinking */
       margin-right: 3px;
     }
 
@@ -1181,7 +1181,7 @@
     #floating-user-info .role-badge img {
       width: 20px;
       height: 20px;
-      object-fit: contain;
+      object-fit: contain; /* Prevent stretching */
     }
 
     /* User Dropdown Styles */
@@ -1249,8 +1249,8 @@
       cursor: pointer;
       padding: 0;
       margin: 0;
-      box-sizing: border-box;
-      background: var(--bg-tertiary);
+      box-sizing: border-box; /* Include border in dimensions */
+      background: var(--bg-tertiary); /* Fallback background */
     }
 
     .dropdown-avatar:hover {
@@ -1277,9 +1277,9 @@
       height: 100%;
       object-fit: cover;
       transition: inherit;
-      display: block;
-      min-width: 100%;
-      min-height: 100%;
+      display: block; /* Remove inline spacing */
+      min-width: 100%; /* Ensure full coverage */
+      min-height: 100%; /* Ensure full coverage */
     }
 
     .dropdown-avatar .default-avatar {
@@ -1291,8 +1291,8 @@
       font-size: 40px;
       font-weight: bold;
       transition: inherit;
-      margin: 0;
-      flex: 1;
+      margin: 0; /* Remove any default margins */
+      flex: 1; /* Fill available space */
     }
 
     .avatar-edit-icon {
@@ -1320,7 +1320,7 @@
     }
 
     .avatar-edit-icon:hover svg {
-      opacity: 1;
+      opacity: 1;     /* Full opacity on hover */
     }
 
     .dropdown-divider {
@@ -1817,7 +1817,7 @@
     top: 188px;
     right: 20px;
     width: auto;
-    min-width: 200px;
+    min-width: 136px;
     max-width: 300px;
     background: rgba(30,30,30,0.7);
     backdrop-filter: blur(10px);
@@ -1826,7 +1826,7 @@
     border: 1px solid var(--border-light);
     padding: 12px 16px;
     z-index: 49;
-    font-family: 'Marcellus';
+    font-family: 'Math Serif Italic v2';
   ">
     <div style="font-size: 1rem; margin-bottom: 10px; color: var(--accent-primary); font-weight: bold;">
       QUICK STATS
@@ -2161,8 +2161,8 @@
 
         // Save URL in Firebase
         await firebase.database().ref(`users/${currentUser.uid}/photoURL`).set(imageUrl);
-        updateDropdownAvatar(); // Add this line
-        updateUserPanel(); // Refresh all user displays
+        updateDropdownAvatar();
+        updateUserPanel();
     
         // Update both avatars
         const avatars = document.querySelectorAll('.user-avatar img, .dropdown-avatar');
@@ -2392,7 +2392,7 @@
         }
       } catch (error) {
         console.error('Error initializing database:', error);
-        throw error; // Re-throw to be caught by the calling function
+        throw error;
       }
     }
     
@@ -3255,7 +3255,8 @@
         // Hide the card immediately
         hideHoverProfile();
     }
-    
+
+    // Show hover profile on username hover
     function showHoverProfile(username, e) {
       clearTimeout(hoverTimeout);
       hoverTimeout = setTimeout(async () => {
@@ -3282,6 +3283,8 @@
       }, 300);
     }
     
+
+    // Update hover card with user data
     function updateHoverCard(data) {
       const hoverCard = document.getElementById('profileHoverCard');
       document.getElementById('hoverUsername').textContent = data.username;
@@ -3854,7 +3857,7 @@
           
           userList.appendChild(userItem);
         });
-        
+
         // Set up realtime updates
         database.ref('users').on('value', (snapshot) => {
           const updatedUsers = snapshot.val() || {};
